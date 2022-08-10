@@ -1,0 +1,67 @@
+Category,Indicator,id
+Economy & Growth,"Central government debt, total (% of GDP)",GC.DOD.TOTL.GD.ZS
+Economy & Growth,Exports of goods and services (% of GDP),NE.EXP.GNFS.ZS
+Economy & Growth,"Foreign direct investment, net inflows (BoP, current US$)",BX.KLT.DINV.CD.WD
+Economy & Growth,GDP per capita (current US$),NY.GDP.PCAP.CD
+Economy & Growth,GDP per capita growth (annual %),NY.GDP.PCAP.KD.ZG
+Economy & Growth,"GDP per capita, PPP (current international $)",NY.GDP.PCAP.PP.CD
+Economy & Growth,"GNI per capita, PPP (current international $)",NY.GNP.PCAP.PP.CD
+Economy & Growth,"GNI, PPP (current international $)",NY.GNP.MKTP.PP.CD
+Economy & Growth,Imports of goods and services (% of GDP),NE.IMP.GNFS.ZS
+Economy & Growth,"Industry (including construction), value added (% of GDP)",NV.IND.TOTL.ZS
+Economy & Growth,"Inflation, GDP deflator (annual %)",NY.GDP.DEFL.KD.ZG
+Economy & Growth,"Inflation, consumer prices (annual %)",FP.CPI.TOTL.ZG
+Economy & Growth,Medium and high-tech manufacturing value added (% manufacturing value added),NV.MNF.TECH.ZS.UN
+Poverty,Gini index,SI.POV.GINI
+Poverty,Income share held by fourth 20%,SI.DST.04TH.20
+Poverty,Income share held by highest 10%,SI.DST.10TH.10
+Poverty,Income share held by highest 20%,SI.DST.05TH.20
+Poverty,Income share held by lowest 10%,SI.DST.FRST.10
+Poverty,Income share held by lowest 20%,SI.DST.FRST.20
+Poverty,Income share held by second 20%,SI.DST.02ND.20
+Poverty,Income share held by third 20%,SI.DST.03RD.20
+Poverty,Population living in slums (% of urban population),EN.POP.SLUM.UR.ZS
+Poverty,Poverty headcount ratio at national poverty lines (% of population),SI.POV.NAHC
+Social Protection & Labor,"Children in employment, female (% of female children ages 7-14)",SL.TLF.0714.FE.ZS
+Social Protection & Labor,"Children in employment, male (% of male children ages 7-14)",SL.TLF.0714.MA.ZS
+Social Protection & Labor,"Children in employment, total (% of children ages 7-14)",SL.TLF.0714.ZS
+Social Protection & Labor,"Contributing family workers, female (% of female employment) (modeled ILO estimate)",SL.FAM.WORK.FE.ZS
+Social Protection & Labor,"Contributing family workers, male (% of male employment) (modeled ILO estimate)",SL.FAM.WORK.MA.ZS
+Social Protection & Labor,"Employment in agriculture, female (% of female employment) (modeled ILO estimate)",SL.AGR.EMPL.FE.ZS
+Social Protection & Labor,"Employment in agriculture, male (% of male employment) (modeled ILO estimate)",SL.AGR.EMPL.MA.ZS
+Social Protection & Labor,"Employment in industry, female (% of female employment) (modeled ILO estimate)",SL.IND.EMPL.FE.ZS
+Social Protection & Labor,"Employment in industry, male (% of male employment) (modeled ILO estimate)",SL.IND.EMPL.MA.ZS
+Social Protection & Labor,"Employment in services, female (% of female employment) (modeled ILO estimate)",SL.SRV.EMPL.FE.ZS
+Social Protection & Labor,"Employment in services, male (% of male employment) (modeled ILO estimate)",SL.SRV.EMPL.MA.ZS
+Social Protection & Labor,"Employment to population ratio, 15+, total (%) (modeled ILO estimate)",SL.EMP.TOTL.SP.ZS
+Social Protection & Labor,GDP per person employed (constant 2017 PPP $),SL.GDP.PCAP.EM.KD
+Social Protection & Labor,"Labor force participation rate, female (% of female population ages 15+) (modeled ILO estimate)",SL.TLF.CACT.FE.ZS
+Social Protection & Labor,"Labor force participation rate, male (% of male population ages 15+) (modeled ILO estimate)",SL.TLF.CACT.MA.ZS
+Social Protection & Labor,"Labor force, female (% of total labor force)",SL.TLF.TOTL.FE.ZS
+Social Protection & Labor,"Labor force, total",SL.TLF.TOTL.IN
+Social Protection & Labor,"Unemployment, female (% of female labor force) (modeled ILO estimate)",SL.UEM.TOTL.FE.ZS
+Social Protection & Labor,"Unemployment, male (% of male labor force) (modeled ILO estimate)",SL.UEM.TOTL.MA.ZS
+Social Protection & Labor,"Unemployment, total (% of total labor force) (modeled ILO estimate)",SL.UEM.TOTL.ZS
+Social Protection & Labor,"Unemployment, youth female (% of female labor force ages 15-24) (modeled ILO estimate)",SL.UEM.1524.FE.ZS
+Social Protection & Labor,"Unemployment, youth male (% of male labor force ages 15-24) (modeled ILO estimate)",SL.UEM.1524.MA.ZS
+Social Protection & Labor,"Vulnerable employment, female (% of female employment) (modeled ILO estimate)",SL.EMP.VULN.FE.ZS
+Social Protection & Labor,"Vulnerable employment, male (% of male employment) (modeled ILO estimate)",SL.EMP.VULN.MA.ZS
+Social Protection & Labor,"Wage and salaried workers, female (% of female employment) (modeled ILO estimate)",SL.EMP.WORK.FE.ZS
+Social Protection & Labor,"Wage and salaried workers, male (% of male employment) (modeled ILO estimate)",SL.EMP.WORK.MA.ZS
+Environment,Agricultural land (% of land area),AG.LND.AGRI.ZS
+Environment,"Annual freshwater withdrawals, total (% of internal resources)",ER.H2O.FWTL.ZS
+Environment,"Annual freshwater withdrawals, total (billion cubic meters)",ER.H2O.FWTL.K3
+Environment,Arable land (% of land area),AG.LND.ARBL.ZS
+Environment,CO2 emissions (kt),EN.ATM.CO2E.KT
+Environment,CO2 emissions (metric tons per capita),EN.ATM.CO2E.PC
+Environment,Forest area (% of land area),AG.LND.FRST.ZS
+Environment,Forest area (sq. km),AG.LND.FRST.K2
+Environment,Land area (sq. km),AG.LND.TOTL.K2
+Environment,"PM2.5 air pollution, population exposed to levels exceeding WHO guideline value (% of total)",EN.ATM.PM25.MC.ZS
+Environment,Renewable electricity output (% of total electricity output),EG.ELC.RNEW.ZS
+Environment,Renewable energy consumption (% of total final energy consumption),EG.FEC.RNEW.ZS
+Environment,Renewable internal freshwater resources per capita (cubic meters),ER.H2O.INTR.PC
+Environment,"Renewable internal freshwater resources, total (billion cubic meters)",ER.H2O.INTR.K3
+Environment,Surface area (sq. km),AG.SRF.TOTL.K2
+Environment,Total greenhouse gas emissions (kt of CO2 equivalent),EN.ATM.GHGT.KT.CE
+Environment,Total natural resources rents (% of GDP),NY.GDP.TOTL.RT.ZS

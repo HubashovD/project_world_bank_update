@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-format@3"></script>
+
+    <script src="scripts/custom-select.js"></script>
+    <link rel="stylesheet" href="css/custom-select.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div>
+        Hello World!
+    </div>
+
+    <div id='categorySelectorWrapper'>
+        <p>categorySelector:</p>
+        <div id='categorySelectorBlock'>
+            <div id='categorySelector' style="font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+            color: #444444;">loading...</div>
+        </div>
+    </div>
+
+    <div id='indicatorsSelectorWrapper'>
+        <p> Select an indicator:</p>
+        <div id='indicatorsSelectorBlock'>
+            <div id='indicatorsSelector' style="font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+            color: #444444;">loading...</div>
+        </div>
+    </div>
+
+    <div id='countriesSelectorWrapper'>
+        <p style='grid-row:1; grid-column: 1;'>Select a country:</p>
+        <div style='grid-row:1; grid-column: 2;'>
+            <div id='forAfter'>
+                <button onclick="myFunction()" class="dropbtn">Country selector</button>
+                <img id='checkSvg' src="https://raw.githubusercontent.com/HubashovD/UNSDG/b200a2d5d121cb469550bc24d6ae75e21a34fd96/web/pic/check.svg">
+            </div>
+            <div id="myDropdown" class="dropdown-content">
+                <div id='selectedButtons'>
+                    <input type="button" onclick='selects()' value="Select All" id="selectAllButton" class="selectButtons" />
+                    <input type="button" onclick='deSelect()' value="Deselect All" id="deSelectAllButton" class="selectButtons" />
+                    <input type="button" onclick='menaSelect()' value="Select MENA" id="menaSelectButton" class="selectButtons" />
+                </div>
+                <div id='countriesSelector' style="font-size: 14px;
+                font-family: 'Montserrat', sans-serif;
+                color: #444444;"> loading...</div>
+            </div>
+        </div>
+    </div>
+    <div id='yearPlaceholder'></div>
+    <div id='lineBlockWrapper'>
+        <div id='lineBlock'></div>
+    </div>
+
+
+    <script src="scripts/retrieve_data_Rev2.js"></script>
+
+    <script type="text/javascript">
+        function menaSelect() {
+            var selec = document.getElementsByName('ck');
+            for (var i = 0; i < selec.length; i++) {
+                if (selec[i].type == 'checkbox') {
+                    if (selec[i].classList.contains("menaCountry")) {
+                        selec[i].checked = true;
+                    } else {
+                        selec[i].checked = false;
+                    }
+                }
+
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+        function selects() {
+            var selec = document.getElementsByName('ck');
+            for (var i = 0; i < selec.length; i++) {
+                if (selec[i].type == 'checkbox')
+                    selec[i].checked = true;
+            }
+        }
+
+        function deSelect() {
+            var selec = document.getElementsByName('ck');
+            for (var i = 0; i < selec.length; i++) {
+                if (selec[i].type == 'checkbox')
+                    selec[i].checked = false;
+
+            }
+        }
+    </script>
+
+    <script>
+        /* When the user clicks on the button, 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            toggle between hiding and showing the dropdown content */
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
+</body>
