@@ -17,61 +17,70 @@
 </head>
 
 <body>
-    <div>
-        Hello World!
-    </div>
-
-    <div id='categorySelectorWrapper'>
-        <p>categorySelector:</p>
-        <div id='categorySelectorBlock'>
-            <div id='categorySelector' style="font-size: 14px;
+    <div id='totalBoby'>
+        <div id='categorySelectorWrapper'>
+            <p>categorySelector:</p>
+            <div id='categorySelectorBlock'>
+                <div id='categorySelector' style="font-size: 14px;
             font-family: 'Montserrat', sans-serif;
             color: #444444;">loading...</div>
-        </div>
-    </div>
-
-    <div id='indicatorsSelectorWrapper'>
-        <p> Select an indicator:</p>
-        <div id='indicatorsSelectorBlock'>
-            <div id='indicatorsSelector' style="font-size: 14px;
-            font-family: 'Montserrat', sans-serif;
-            color: #444444;">loading...</div>
-        </div>
-    </div>
-
-    <div id='yearsSelectorWrapper'>
-        <div id='yearsSelector'></div>
-    </div>
-
-    <div id='countriesSelectorWrapper'>
-        <p style='grid-row:1; grid-column: 1;'>Select a country:</p>
-        <div style='grid-row:1; grid-column: 2;'>
-            <div id='forAfter'>
-                <button onclick="myFunction()" class="dropbtn">Country selector</button>
-                <img id='checkSvg' src="https://raw.githubusercontent.com/HubashovD/UNSDG/b200a2d5d121cb469550bc24d6ae75e21a34fd96/web/pic/check.svg">
             </div>
-            <div id="myDropdown" class="dropdown-content">
-                <div id='selectedButtons'>
-                    <input type="button" onclick='selects()' value="Select All" id="selectAllButton" class="selectButtons" />
-                    <input type="button" onclick='deSelect()' value="Deselect All" id="deSelectAllButton" class="selectButtons" />
-                    <input type="button" onclick='menaSelect()' value="Select MENA" id="menaSelectButton" class="selectButtons" />
+        </div>
+
+        <div id='indicatorsSelectorWrapper'>
+            <p> Select an indicator:</p>
+            <div id='indicatorsSelectorBlock'>
+                <div id='indicatorsSelector' style="font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
+            color: #444444;">loading...</div>
+            </div>
+        </div>
+
+        <div id='yearsSelectorWrapper'>
+            <p> Select a year:</p>
+            <div id='yearSelectorBlock'>
+                <div id='yearsSelector' style="font-size: 14px;
+                font-family: 'Montserrat', sans-serif;
+                color: #444444;">loading...</div>
+            </div>
+        </div>
+
+        <div id='countriesSelectorWrapper'>
+            <p style='grid-row:1; grid-column: 1;'>Select a country:</p>
+            <div style='grid-row:1; grid-column: 2;'>
+                <div id='forAfter'>
+                    <button onclick="myFunction()" class="dropbtn">Country selector</button>
+                    <img id='checkSvg' src="https://raw.githubusercontent.com/HubashovD/UNSDG/b200a2d5d121cb469550bc24d6ae75e21a34fd96/web/pic/check.svg">
                 </div>
-                <div id='countriesSelector' style="font-size: 14px;
+                <div id="myDropdown" class="dropdown-content">
+                    <div id='selectedButtons'>
+                        <input type="button" onclick='selects()' value="Select All" id="selectAllButton" class="selectButtons" />
+                        <input type="button" onclick='deSelect()' value="Deselect All" id="deSelectAllButton" class="selectButtons" />
+                        <input type="button" onclick='menaSelect()' value="Select MENA" id="menaSelectButton" class="selectButtons" />
+                    </div>
+                    <div id='countriesSelector' style="font-size: 14px;
                 font-family: 'Montserrat', sans-serif;
                 color: #444444;"> loading...</div>
+                </div>
             </div>
         </div>
-    </div>
-    <div id='yearPlaceholder'></div>
-    <div id='map_block'></div>
-    <div id="mapTooltip">
-        <p>You can zoom and pan map, hover mouse on map to recieve more data</p>
-    </div>
-    <div id='lineBlockWrapper'>
-        <div id='lineBlock'></div>
-    </div>
+        <div id='yearPlaceholder'></div>
+        <div id='map_block'></div>
+        <div id="mapTooltip">
+            <p>You can zoom and pan map, hover mouse on map to recieve more data</p>
+        </div>
+        <div id='barBlockWrapper'>
+            <div id='barBlock'> </div>
+        </div>
+        <div id='lineBlockWrapper'>
+            <div id='lineBlock'></div>
+        </div>
 
+        <div id='downloadButtonDiv'>
+            <input type="button" value="Download data" id="downloadButton" />
+        </div>
 
+    </div>
     <script src="scripts/retrieve_data_Rev2.js"></script>
     <script src='scripts/getMapR2.js'></script>
 
@@ -112,7 +121,7 @@
 
     <script>
         /* When the user clicks on the button, 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    toggle between hiding and showing the dropdown content */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            toggle between hiding and showing the dropdown content */
         function myFunction() {
             document.getElementById("myDropdown").classList.toggle("show");
         }
