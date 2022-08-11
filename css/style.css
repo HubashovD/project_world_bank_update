@@ -188,6 +188,12 @@ body {
     grid-column: 2;
 }
 
+#barBlockWrapper {}
+
+#barBlock {
+    height: 500px;
+}
+
 #lineBlock {
     position: relative;
     height: 500px;
