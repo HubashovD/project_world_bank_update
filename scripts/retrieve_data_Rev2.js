@@ -449,51 +449,35 @@ function retrieve_data(value) {
                         .style("left", (d3.mouse(this)[0] + 50) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
                         .style("top", (d3.mouse(this)[1]) + "px")
                         .html(function() {
-                            var yearPlaceholder = document.getElementById('yearPlaceholder')
-                            try {
-                                while (yearPlaceholder.firstChild) {
-                                    yearPlaceholder.removeChild(yearPlaceholder.lastChild);
-                                }
-                            } catch {}
-                            series =
-                                year = document.createElement('h3');
-                            year.innerHTML = "Year: " + d
-                            yearPlaceholder.appendChild(year)
-
                             var selected = d3.selectAll(".cl" + d)
                             selected._groups.forEach(nodeList => {
-                                    nodeList.forEach(d => {
-                                        console.log(d)
-                                            // for (var i = 0; i < selected.length; i++) {
-                                            // console.log(d)
-                                        if (d.nodeName == "circle") {
-                                            console.log(d.__data__)
-                                                // console.log(d)
-                                            barData.push({
-                                                country: d.__data__.country.value,
-                                                value: d.__data__.value,
-                                                year: d.__data__.date
-                                            })
+                                nodeList.forEach(d => {
+                                    // console.log(d)
+                                    // for (var i = 0; i < selected.length; i++) {
+                                    // console.log(d)
+                                    if (d.nodeName == "circle") {
+                                        // console.log(d.__data__)
+                                        // console.log(d)
+                                        barData.push({
+                                            country: d.__data__.country.value,
+                                            value: d.__data__.value,
+                                            year: d.__data__.date
+                                        })
 
-                                            if (d.__data__.value < 1.0) {
-                                                var val = +d.__data__.value
-                                            } else {
-                                                var val = f(+d.__data__.value)
-                                            }
+                                        if (d.__data__.value < 1.0) {
+                                            var val = +d.__data__.value
+                                        } else {
+                                            var val = f(+d.__data__.value)
+                                        }
 
-                                            text.push({
-                                                country: d.__data__.country.value,
-                                                value: val,
-                                                year: d.__data__.date
-                                            })
-                                        } else {}
-                                    })
+                                        text.push({
+                                            country: d.__data__.country.value,
+                                            value: val,
+                                            year: d.__data__.date
+                                        })
+                                    } else {}
                                 })
-                                // bar_update(barData)
-                                // console.log(barData)
-                            getMap(barData)
-
-                            // text = JSON.stringify(text)
+                            })
                             string = ""
                             text.forEach(elem => {
                                 // console.log(elem)
@@ -510,13 +494,6 @@ function retrieve_data(value) {
                         .duration(200)
                         .style("opacity", 0)
                 }
-
-
-
-
-
-                // console.log(vLines)
-
                 var vLines = line_svg.selectAll("rect")
                 vLines
                     .on("mouseover", mouseover)
@@ -525,113 +502,150 @@ function retrieve_data(value) {
 
 
 
-                // var barData = data.filter(function(d) {
-                //     return d.year == d3.max(data, function(d) {
-                //         return d.year
-                //     })
-                // })
-
-                // bar_update(barData)
-                // getMap(barData)
 
 
+                function exportToCsv(filename, rows) {
+                    var processRow = function(row) {
+                        var finalVal = '';
+                        for (var j = 0; j < row.length; j++) {
+                            var innerValue = row[j] === null ? '' : row[j].toString();
+                            if (row[j] instanceof Date) {
+                                innerValue = row[j].toLocaleString();
+                            };
+                            var result = innerValue.replace(/"/g, '""');
+                            if (result.search(/("|,|\n)/g) >= 0)
+                                result = '"' + result + '"';
+                            if (j > 0)
+                                finalVal += ',';
+                            finalVal += result;
+                        }
+                        return finalVal + '\n';
+                    };
 
+                    var csvFile = '';
+                    for (var i = 0; i < rows.length; i++) {
+                        csvFile += processRow(rows[i]);
+                    }
 
-                // function exportToCsv(filename, rows) {
-                //     var processRow = function(row) {
-                //         var finalVal = '';
-                //         for (var j = 0; j < row.length; j++) {
-                //             var innerValue = row[j] === null ? '' : row[j].toString();
-                //             if (row[j] instanceof Date) {
-                //                 innerValue = row[j].toLocaleString();
-                //             };
-                //             var result = innerValue.replace(/"/g, '""');
-                //             if (result.search(/("|,|\n)/g) >= 0)
-                //                 result = '"' + result + '"';
-                //             if (j > 0)
-                //                 finalVal += ',';
-                //             finalVal += result;
-                //         }
-                //         return finalVal + '\n';
-                //     };
-
-                //     var csvFile = '';
-                //     for (var i = 0; i < rows.length; i++) {
-                //         csvFile += processRow(rows[i]);
-                //     }
-
-                //     var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
-                //     if (navigator.msSaveBlob) { // IE 10+
-                //         navigator.msSaveBlob(blob, filename);
-                //     } else {
-                //         var link = document.createElement("a");
-                //         if (link.download !== undefined) { // feature detection
-                //             // Browsers that support HTML5 download attribute
-                //             var url = URL.createObjectURL(blob);
-                //             link.setAttribute("href", url);
-                //             link.setAttribute("download", filename);
-                //             link.style.visibility = 'hidden';
-                //             document.body.appendChild(link);
-                //             link.click();
-                //             document.body.removeChild(link);
-                //         }
-                //     }
-                // }
-
-                // dataForDownload = []
-                // head = []
-                // data[0]
-
-                // for (const [key, value] of Object.entries(dataFiltered[0])) {
-                //     if (key == 'dimensions') {
-                //         for (const [key, value] of Object.entries(data[0].dimensions)) {
-                //             head.push(key)
-                //         }
-                //     } else { head.push(key) }
-                // }
-
-                // dataForDownload.push(head)
-
-                // data.forEach(elem => {
-                //     row = []
-                //         // console.log(elem)
-                //     for (const [key, value] of Object.entries(elem)) {
-                //         if (key == 'dimensions') {
-                //             for (const [key, value] of Object.entries(elem.dimensions)) {
-                //                 row.push(value)
-                //             }
-                //         } else { row.push(value) }
-
-                //     }
-                //     dataForDownload.push(row)
-                // })
+                    var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+                    if (navigator.msSaveBlob) { // IE 10+
+                        navigator.msSaveBlob(blob, filename);
+                    } else {
+                        var link = document.createElement("a");
+                        if (link.download !== undefined) { // feature detection
+                            // Browsers that support HTML5 download attribute
+                            var url = URL.createObjectURL(blob);
+                            link.setAttribute("href", url);
+                            link.setAttribute("download", filename);
+                            link.style.visibility = 'hidden';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }
+                    }
+                }
 
 
 
-                // // exportToCsv(dataFiltered[0].seriesDescription, dataForDownload)
 
 
-                // var downloadButtonDiv = document.getElementById("downloadButtonDiv");
+                dataForDownload = []
+                head = []
+                console.log(data)
+
+                try {
+                    for (const [key, value] of Object.entries(data[0])) {
+                        if (key == 'indicator') {
+                            for (const [k, v] of Object.entries(value)) {
+                                if (k == 'id') {
+                                    head.push("indicator_code")
+                                } else if (k == 'value') {
+                                    head.push("indicator_name")
+                                } else {}
+
+                            }
+                        } else if (key == 'country') {
+                            for (const [k, v] of Object.entries(value)) {
+                                if (k == 'id') {
+                                    head.push("country_code")
+                                } else if (k == 'value') {
+                                    head.push("country_name")
+                                } else {}
+                            }
+                        } else {
+                            head.push(key)
+                        }
+                    }
+
+                    dataForDownload.push(head)
+                    data.forEach((elem) => {
+                        row = []
+                        for (const [key, value] of Object.entries(elem)) {
+                            // console.log(key)
+                            // console.log(value)
+                            if (key == 'indicator') {
+                                row.push(value.id)
+                                row.push(value.value)
+                            } else if (key == 'country') {
+                                row.push(value.id)
+                                row.push(value.value)
+                            } else {
+                                row.push(value)
+                            }
+                        }
+                        dataForDownload.push(row)
+                    })
+
+                } catch {}
+
 
                 // try {
-                //     while (downloadButtonDiv.firstChild) {
-                //         downloadButtonDiv.removeChild(downloadButtonDiv.lastChild);
+                //     for (const [key, value] of Object.entries(data[0])) {
+                //         head.push(key)
                 //     }
+
+                //     dataForDownload.push(head)
+
+                //     data.forEach(elem => {
+
+                //         for (const [key, value] of Object.entries(elem)) {
+                //             row.push(value)
+                //         }
+                //         dataForDownload.push(row)
+                //     })
+
                 // } catch {}
 
-                // downloadButton = document.createElement('input');
-                // downloadButton.type = "button"
-                // downloadButton.value = "Download data"
-                // downloadButton.id = "downloadButton"
-                // downloadButtonDiv.appendChild(downloadButton)
+                // exportToCsv(dataFiltered[0].seriesDescription, dataForDownload)
 
 
-                // var listener = function() {
-                //     console.log(dataForDownload)
-                //     exportToCsv(data[0].seriesDescription.slice(0, 150), dataForDownload)
-                // }
+                var downloadButtonDiv = document.getElementById("downloadButtonDiv");
 
-                // downloadButton.addEventListener('click', listener)
+                try {
+                    while (downloadButtonDiv.firstChild) {
+                        downloadButtonDiv.removeChild(downloadButtonDiv.lastChild);
+                    }
+                } catch {}
+
+                downloadButton = document.createElement('input');
+                downloadButton.type = "button"
+                downloadButton.value = "Download data"
+                downloadButton.id = "downloadButton"
+                downloadButtonDiv.appendChild(downloadButton)
+
+
+                parentIndicator = document.querySelector('#indicatorsSelector')
+                const btn1 = parentIndicator.querySelector('.select__toggle');
+                console.log(`Выбранное значение: ${btn1.name}`);
+                csvName = btn1.name
+
+
+                var listener = function() {
+                    console.log(dataForDownload)
+                    exportToCsv(csvName.slice(0, 150), dataForDownload)
+                }
+
+                downloadButton.addEventListener('click', listener)
 
 
 
@@ -776,28 +790,181 @@ function retrieve_data(value) {
 
             }
 
+            function drawBar(data) {
+                // set the dimensions and margins of the graph
+                var bar_margin = { top: 10, right: 50, bottom: 10, left: 100 },
+                    bar_width = d3.select("#barBlock").node().getBoundingClientRect().width - bar_margin.left - bar_margin.right,
+                    bar_height = d3.select("#barBlock").node().getBoundingClientRect().height - bar_margin.top - bar_margin.bottom;
+
+                // append the svg object to the body of the page
+                var bar_svg = d3.select("#barBlock")
+                    .append("svg")
+                    .attr("width", bar_width + bar_margin.left + bar_margin.right)
+                    .attr("height", bar_height + bar_margin.top + bar_margin.bottom)
+                    .append("g")
+                    .attr("transform",
+                        "translate(" + bar_margin.left + "," + bar_margin.top + ")");
+
+                // Initialize the X axis
+                var bar_y = d3.scaleBand()
+                    .range([0, bar_height])
+                    .padding(0.2);
+
+                var bar_xAxis = bar_svg.append("g")
+                    .attr("transform", "translate(0," + bar_height + ")")
+
+                // Initialize the Y axis
+                var bar_x = d3.scaleLinear()
+                    .range([0, bar_width])
+
+
+                var bar_yAxis = bar_svg.append("g")
+                    .attr("class", "myYaxis")
+
+                bar_yAxis.call(d3.axisLeft(bar_y))
+
+
+                // A function that create / update the plot for a given variable:
+                function bar_update(data) {
+                    data.sort(function(b, a) {
+                        return a.value - b.value;
+                    });
+
+                    var arr = []
+                    data.forEach(function(d) {
+                        arr.push(+d.value)
+                    })
+
+                    function domainRes(arr) {
+                        if (d3.min(arr) > 0) {
+                            // console.log(d3.min(arr))
+                            return [0, d3.max(arr)]
+                        } else {
+                            return [d3.min(arr), d3.max(arr)]
+                        }
+                    }
+
+                    domainResult = domainRes(arr)
+                        // console.log(domainResult)
+
+
+                    // console.log(data)
+
+                    // Update the X axis
+                    bar_y
+                        .domain(data.map(function(d) {
+                            return d.country;
+                        }))
+
+                    bar_yAxis.call(d3.axisLeft(bar_y))
+
+
+                    // Update the Y axis
+                    bar_x.domain(domainResult)
+                    bar_xAxis.transition().duration(1).call(d3.axisBottom(bar_x));
+
+                    bar_xAxis.attr('class', 'bottomAxis')
+
+                    // console.log(bar_xAxis)
+
+
+                    // Create the u variable
+                    var bar_u = bar_svg.selectAll("rect")
+                        .data(data)
+
+                    bar_u
+                        .enter()
+                        .append("rect") // Add a new rect for each new elements
+                        .merge(bar_u) // get the already existing elements as well
+                        .transition() // and apply changes to all of them
+                        .duration(1)
+                        // .attr("x", 0)
+                        .attr("x", function(d) {
+                            // console.log(bar_x(Math.min(0, d.value)))
+                            return bar_x(Math.min(0, d.value));
+                        })
+                        .attr("y", function(d) { return bar_y(d.country); })
+                        .attr("height", bar_y.bandwidth())
+                        // .attr("width", function(d) { return bar_x(d.value); })
+                        .attr("width", function(d) { return Math.abs(bar_x(d.value) - bar_x(0)); })
+                        .attr("fill", "#a7cc33")
+
+
+
+                    // If less group in the new dataset, I delete the ones not in use anymore
+
+                    bar_u
+
+                        .exit()
+
+                    .remove()
+
+
+
+                    var labels = bar_svg.selectAll(".label")
+                        .data(data)
+
+                    // console.log(labels)
+                    var f = d3.format(".2s")
+                    labels
+                        .enter()
+                        .append("text")
+                        .attr("class", "label")
+                        .merge(labels)
+                        .attr("y", function(d) { return bar_y(d.country); })
+                        .transition() // and apply changes to all of them
+                        .duration(10)
+                        .attr("x", (function(d) { return bar_x(d.value); }))
+                        .attr("y", function(d) { return bar_y(d.country) + (bar_y.bandwidth() / 2) + 3; })
+                        .attr("dy", ".75em")
+                        .text(function(d) {
+                            // console.log(d)
+                            if (d.value < 1.0) {
+                                return d.value
+                            } else {
+                                return f(d.value)
+                            }
+                        });
+
+                    labels
+                        .exit()
+                        .remove()
+
+
+                }
+
+                // Initialize the plot with the first dataset
+                // bar_update()
+            }
+
+            function drawScatter(data) {}
+
             document.querySelector('#yearsSelector').addEventListener('select.change', (e) => {
                 const btn = e.target.querySelector('.select__toggle');
                 console.log(`Выбранное значение: ${btn.value}`);
                 drawMap(cleanData)
+                    // drawBar(cleanData)
             });
 
             var deSelectAllButton = document.querySelector('#deSelectAllButton')
             deSelectAllButton.addEventListener('click', (event) => {
                 filterData(cleanData)
                 drawMap(cleanData)
+                    // drawBar(cleanData)
             })
 
             var selectAllButton = document.querySelector('#selectAllButton')
             selectAllButton.addEventListener('click', (event) => {
                 filterData(cleanData)
                 drawMap(cleanData)
+                    // drawBar(cleanData)
             })
 
             var menaSelectButton = document.querySelector('#menaSelectButton')
             menaSelectButton.addEventListener('click', (event) => {
                 filterData(cleanData)
                 drawMap(cleanData)
+                    // drawBar(cleanData)
             })
 
 
