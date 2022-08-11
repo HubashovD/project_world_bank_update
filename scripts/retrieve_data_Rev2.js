@@ -1,5 +1,7 @@
 function retrieve_data(value) {
 
+
+
     function download_data(value) {
         var list = document.getElementById('lineBlockWrapper')
         try {
@@ -20,6 +22,12 @@ function retrieve_data(value) {
             "SAU", "SOM", "SSD", "SDN", "SYR", "TUN", "TUR", "ARE", "YEM", "ARB", "BMN", "WLD", "ARB", "LIC", "LMC", "MIC", "UMC", "HIC", "OED", "EAS", "EUU", "CHN", 'USA'
         ]
 
+        var menaCountriesCodes = ['AFG', 'BHR', 'DZA', 'COM', 'DJI', 'EGY', 'ERI', 'ETH', 'IRN', 'IRQ', 'ISR', 'JOR', 'KWT', 'LBN', 'LBY', 'MRT', 'MAR', 'OMN', 'PAK', 'QAT',
+            "SAU", "SOM", "SSD", "SDN", "SYR", "TUN", "TUR", "ARE", "YEM", "ARB"
+        ]
+
+        var menaCountriesNames = []
+
         var countries_2 = 'AFG;BHR;DZA;COM;DJI;EGY;ERI;ETH;IRN;IRQ;ISR;JOR;KWT;LBN;LBY;MRT;MAR;OMN;PAK;QAT;SAU;SOM;SSD;SDN;SYR;TUN;TUR;ARE;YEM;ARB;BMN;WLD;ARB;LIC;LMC;MIC;UMC;HIC;OED;EAS;EUU;CHN;USA'
 
 
@@ -32,14 +40,35 @@ function retrieve_data(value) {
 
             countries = []
             cleanData = []
+            filterCountries = []
             data[1].forEach(function(entry) {
                 if (entry.value != null) {
                     cleanData.push(entry)
-                    if (countries.includes(entry.country.value)) {} else {
-                        countries.push(entry.country.value)
+
+                    if (filterCountries.includes(entry.country.value)) {} else {
+                        filterCountries.push(entry.country.value)
+                        if (entry.country.value == 'High income') {
+                            countries.push({
+                                name: entry.country.value,
+                                id: "HIC"
+                            })
+                        } else {
+                            countries.push({
+                                name: entry.country.value,
+                                id: entry.countryiso3code
+                            })
+                        }
                     }
+
+                    if (menaCountriesCodes.includes(entry.countryiso3code)) {
+                        if (menaCountriesNames.includes(entry.country.value)) {} else { menaCountriesNames.push(entry.country.value) }
+                    } else {}
                 } else {}
+
             })
+
+            console.log(yearsList)
+            console.log(menaCountriesNames)
 
             var list = document.getElementById('countriesSelector')
             try {
@@ -52,18 +81,28 @@ function retrieve_data(value) {
                 dv = document.createElement('div');
                 opt = document.createElement('input');
                 lab = document.createElement('label');
-                opt.innerHTML = element
-                opt.value = element
+                opt.innerHTML = element.name
+                opt.value = element.id
                 opt.classList.add('custom-checkbox')
+                if (menaCountriesNames.includes(element)) {
+                    opt.classList.add('menaCountry')
+                } else {}
                 opt.type = "checkbox"
                 opt.name = "ck"
-                opt.id = element
-                lab.for = element
-                lab.innerHTML = element
+                element.name = element.name.replace(',', '')
+                element.name = element.name.replace('.', '')
+                element.name = element.name.replace(/\s/g, '')
+                opt.id = element.id
+                lab.for = element.name
+                lab.innerHTML = element.name
                 list.appendChild(dv)
                 dv.appendChild(lab)
                 dv.appendChild(opt)
             });
+
+
+
+
 
             // console.log(cleanData)
 
@@ -87,14 +126,35 @@ function retrieve_data(value) {
 
             var unique_years = []
 
+            var yearsList = []
+
             cleanData.forEach((d) => {
-                // console.log(d.year)
+                // console.log(d.year
+
                 if (unique_years.includes(d.date)) {
 
                 } else { unique_years.push(d.date) }
             })
 
-            // console.log(unique_years.sort())
+
+            unique_years.sort().forEach((d) => {
+                if (yearsList.includes(d)) {
+
+                } else {
+                    singleYear = []
+                    singleYear.push(d)
+                    singleYear.push(d)
+                    yearsList.push(singleYear)
+                }
+            })
+
+            yearsSelector = new CustomSelect('#yearsSelector', {
+                name: yearsList[0][1],
+                targetValue: yearsList[0][0],
+                options: yearsList,
+            })
+
+
 
             var line_x = d3.scaleBand()
                 .domain(d3.extent(unique_years, function(d) {
@@ -132,8 +192,37 @@ function retrieve_data(value) {
 
 
 
-            function filteredData(data) {
-                // console.log(data)
+
+
+            function filterData(data) {
+                console.log('filterData(data)')
+                    // console.log(countries)
+
+                countries_selected = []
+                countries.forEach(function(d) {
+                    // console.log(d)
+                    var cbb = document.querySelector('#' + d.id);
+                    if (cbb.checked == true) {
+                        countries_selected.push(cbb.value)
+                        console.log(countries_selected)
+                    } else {
+                        countries_selected.filter((n) => { return n != cbb.value.toString() })
+                    }
+                })
+                console.log(countries_selected)
+
+
+                var filteredData = data.filter(function(elem) {
+                    // console.log(elem)
+                    if (countries_selected.includes(elem.countryiso3code)) {
+                        console.log(elem)
+                        return elem
+                    } else {}
+                })
+
+                data = filteredData
+
+                console.log(filteredData)
 
                 var color = d3.scaleOrdinal()
                     .domain(data)
@@ -266,14 +355,6 @@ function retrieve_data(value) {
                     .transition()
                     .duration(500)
                     .attr("d", function(d) {
-                        // val = []
-                        // d.values.forEach(function(e) {
-                        //     val.push(e.value)
-                        //         // console.log(e.value)
-
-                        // })
-                        // console.log(val)
-                        // return linepath(val);
                         return linepath(d.values);
                     })
                     .attr("fill", "none")
@@ -382,14 +463,16 @@ function retrieve_data(value) {
                             var selected = d3.selectAll(".cl" + d)
                             selected._groups.forEach(nodeList => {
                                     nodeList.forEach(d => {
-                                        // for (var i = 0; i < selected.length; i++) {
-                                        // console.log(d)
-                                        if (d.nodeName == "circle") {
+                                        console.log(d)
+                                            // for (var i = 0; i < selected.length; i++) {
                                             // console.log(d)
+                                        if (d.nodeName == "circle") {
+                                            console.log(d.__data__)
+                                                // console.log(d)
                                             barData.push({
-                                                country: d.__data__.country,
+                                                country: d.__data__.country.value,
                                                 value: d.__data__.value,
-                                                year: d.__data__.year
+                                                year: d.__data__.date
                                             })
 
                                             if (d.__data__.value < 1.0) {
@@ -399,16 +482,16 @@ function retrieve_data(value) {
                                             }
 
                                             text.push({
-                                                country: d.__data__.country,
+                                                country: d.__data__.country.value,
                                                 value: val,
-                                                year: d.__data__.year
+                                                year: d.__data__.date
                                             })
                                         } else {}
                                     })
                                 })
                                 // bar_update(barData)
                                 // console.log(barData)
-                                // getMap(barData)
+                            getMap(barData)
 
                             // text = JSON.stringify(text)
                             string = ""
@@ -442,27 +525,16 @@ function retrieve_data(value) {
 
 
 
-                var barData = data.filter(function(d) {
-                    return d.year == d3.max(data, function(d) {
-                        return d.year
-                    })
-                })
+                // var barData = data.filter(function(d) {
+                //     return d.year == d3.max(data, function(d) {
+                //         return d.year
+                //     })
+                // })
 
                 // bar_update(barData)
                 // getMap(barData)
 
-                var yearPlaceholder = document.getElementById('yearPlaceholder')
-                try {
-                    while (yearPlaceholder.firstChild) {
-                        yearPlaceholder.removeChild(yearPlaceholder.lastChild);
-                    }
-                } catch {}
 
-                year = document.createElement('h3');
-                year.innerHTML = "Year: " + d3.max(data, function(d) {
-                    return d.year
-                })
-                yearPlaceholder.appendChild(year)
 
 
                 // function exportToCsv(filename, rows) {
@@ -564,13 +636,182 @@ function retrieve_data(value) {
 
 
             }
-            filteredData(cleanData)
+            filterData(cleanData)
+
+            function drawMap(data) {
+
+
+                var parent = document.querySelector('#yearsSelector')
+                console.log(parent)
+                const btn = parent.querySelector('.select__toggle')
+                year = btn.value
+                console.log(`Выбранное значение: ${btn.value}`)
+
+                var yearPlaceholder = document.getElementById('yearPlaceholder')
+                try {
+                    while (yearPlaceholder.firstChild) {
+                        yearPlaceholder.removeChild(yearPlaceholder.lastChild);
+                    }
+                } catch {}
+
+                yearText = document.createElement('h3');
+                yearText.innerHTML = year
+                yearPlaceholder.appendChild(yearText)
+
+
+                console.log(year)
+
+                countries_selected = []
+                countries.forEach(function(d) {
+                    var cbb = document.querySelector('#' + d.id);
+                    if (cbb.checked == true) {
+                        countries_selected.push(cbb.value)
+                            // console.log(countries_selected)
+                    } else {
+                        countries_selected.filter((n) => { return n != cbb.value.toString() })
+                    }
+                })
+
+                console.log(countries_selected)
+
+
+                var filteredData = data.filter(function(elem) {
+                    // console.log(elem)
+                    if (countries_selected.includes(elem.countryiso3code)) {
+                        return elem
+                    } else {}
+                })
+
+                filteredData = filteredData.filter(function(elem) {
+                    if (elem.date === year) {
+                        return elem
+                    }
+                })
+
+                console.log(filteredData)
+
+                countryL = document.getElementsByClassName("countryL")
+
+
+                for (let elem of countryL) {
+                    elem.style.fill = "#eff3ff"
+                }
+
+                values_list = []
+                filteredData.forEach(elem => {
+                    values_list.push(elem.value)
+                })
+
+                cscale = values_list.length
+
+                map_svg = d3.select("#map_block")
+                var map_colorScale = d3.scaleThreshold()
+                    .domain(values_list)
+                    .range(d3.schemeGnBu[9]);
+
+
+                filteredData.forEach((elem) => {
+                    try {
+                        item = document.getElementById(elem.countryiso3code + "Map")
+                            // console.log(item)
+                        item.style.fill = map_colorScale(elem.value)
+                        item.style.cursor = 'pointer'
+                        item.__data__.properties.value = elem.value
+                    } catch {}
+                })
+
+                var callTooltip = function(volData) {
+                    console.log(volData)
+                    mapTooltip = document.getElementById('mapTooltip')
+
+                    try {
+                        while (mapTooltip.firstChild) {
+                            mapTooltip.removeChild(mapTooltip.lastChild);
+                        }
+                    } catch {}
+
+
+                    opt = document.createElement('p');
+                    opt.innerHTML = volData[0].name + ": " + volData[0].value
+                    opt.style.cssText = "position: relative;"
+
+                    mapTooltip.appendChild(opt)
+                }
+
+
+                filteredData.forEach(elem => {
+                    try {
+                        item = document.getElementById(elem.countryiso3code + "Map")
+                            // console.log(item)
+                        item.onmouseover = function(event) {
+                            // console.log(this.__data__)
+                            // console.log(this.__data__.properties.name + " : " + this.__data__.properties.value)
+                            volData = []
+                            volData.push({
+                                name: this.__data__.properties.name,
+                                value: this.__data__.properties.value,
+                            })
+                            callTooltip(volData)
+
+                        }
+
+                        item.onmouseleave = function(event) {
+                            mapTooltip = document.getElementById("mapTooltip")
+                            try {
+                                while (mapTooltip.firstChild) {
+                                    mapTooltip.removeChild(mapTooltip.lastChild);
+                                }
+                            } catch {}
+
+                            opt = document.createElement('p');
+                            opt.innerHTML = "You can zoom and pan map, hover mouse on map to recieve more data"
+                            mapTooltip.appendChild(opt)
+                        }
+                    } catch {}
+                })
+
+
+
+
+
+            }
+
+            document.querySelector('#yearsSelector').addEventListener('select.change', (e) => {
+                const btn = e.target.querySelector('.select__toggle');
+                console.log(`Выбранное значение: ${btn.value}`);
+                drawMap(cleanData)
+            });
+
+            var deSelectAllButton = document.querySelector('#deSelectAllButton')
+            deSelectAllButton.addEventListener('click', (event) => {
+                filterData(cleanData)
+                drawMap(cleanData)
+            })
+
+            var selectAllButton = document.querySelector('#selectAllButton')
+            selectAllButton.addEventListener('click', (event) => {
+                filterData(cleanData)
+                drawMap(cleanData)
+            })
+
+            var menaSelectButton = document.querySelector('#menaSelectButton')
+            menaSelectButton.addEventListener('click', (event) => {
+                filterData(cleanData)
+                drawMap(cleanData)
+            })
+
 
         })
 
 
+
+
+
+
     }
     download_data(value)
+
+
 
     document.querySelector('#indicatorsSelector').addEventListener('select.change', (e) => {
         const btn = e.target.querySelector('.select__toggle');
