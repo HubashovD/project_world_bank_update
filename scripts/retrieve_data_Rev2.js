@@ -1,6 +1,34 @@
+var bar_margin = { top: 10, right: 50, bottom: 10, left: 100 },
+    bar_width = d3.select("#barBlock").node().getBoundingClientRect().width - bar_margin.left - bar_margin.right,
+    bar_height = d3.select("#barBlock").node().getBoundingClientRect().height - bar_margin.top - bar_margin.bottom;
+
+var bar_svg = d3.select("#barBlock")
+    .append("svg")
+    .attr("width", bar_width + bar_margin.left + bar_margin.right)
+    .attr("height", bar_height + bar_margin.top + bar_margin.bottom)
+    .append("g")
+    .attr("transform",
+        "translate(" + bar_margin.left + "," + bar_margin.top + ")");
+
+var bar_y = d3.scaleBand()
+    .range([0, bar_height])
+    .padding(0.2);
+
+var bar_xAxis = bar_svg.append("g")
+    .attr("transform", "translate(0," + bar_height + ")")
+
+// Initialize the Y axis
+var bar_x = d3.scaleLinear()
+    .range([0, bar_width])
+
+
+var bar_yAxis = bar_svg.append("g")
+    .attr("class", "myYaxis")
+
+bar_yAxis.call(d3.axisLeft(bar_y))
+
+
 function retrieve_data(value) {
-
-
 
     function download_data(value) {
         var list = document.getElementById('lineBlockWrapper')
@@ -103,9 +131,6 @@ function retrieve_data(value) {
 
 
 
-
-            // console.log(cleanData)
-
             var line_margin = { top: 30, right: 30, bottom: 40, left: 30 },
                 line_width = d3.select("#lineBlock").node().getBoundingClientRect().width - line_margin.left - line_margin.right,
                 line_height = d3.select("#lineBlock").node().getBoundingClientRect().height - line_margin.top - line_margin.bottom;
@@ -136,6 +161,15 @@ function retrieve_data(value) {
                 } else { unique_years.push(d.date) }
             })
 
+            var list = document.getElementById('yearSelectorBlock')
+            try {
+                while (list.firstChild) {
+                    list.removeChild(list.lastChild);
+                }
+            } catch {}
+            il = document.createElement('div');
+            il.id = 'yearsSelector'
+            list.appendChild(il)
 
             unique_years.sort().forEach((d) => {
                 if (yearsList.includes(d)) {
@@ -204,7 +238,7 @@ function retrieve_data(value) {
                     var cbb = document.querySelector('#' + d.id);
                     if (cbb.checked == true) {
                         countries_selected.push(cbb.value)
-                        console.log(countries_selected)
+                            // console.log(countries_selected)
                     } else {
                         countries_selected.filter((n) => { return n != cbb.value.toString() })
                     }
@@ -215,7 +249,7 @@ function retrieve_data(value) {
                 var filteredData = data.filter(function(elem) {
                     // console.log(elem)
                     if (countries_selected.includes(elem.countryiso3code)) {
-                        console.log(elem)
+                        // console.log(elem)
                         return elem
                     } else {}
                 })
@@ -226,7 +260,20 @@ function retrieve_data(value) {
 
                 var color = d3.scaleOrdinal()
                     .domain(data)
-                    .range(['#e41a1c', "#BE6E61", '#377eb8', "#BEB461", "#6179BE", '#4daf4a', '#984ea3', "#B861BE", '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#999999', "#a6cee3",
+                    .range(['#e41a1c',
+                        "#BE6E61",
+                        '#377eb8',
+                        "#BEB461",
+                        "#6179BE",
+                        '#4daf4a',
+                        '#984ea3',
+                        "#B861BE",
+                        '#ff7f00',
+                        '#ffff33',
+                        '#a65628',
+                        '#f781bf',
+                        '#999999',
+                        "#a6cee3",
                         "#1f78b4",
                         "#b2df8a",
                         "#33a02c",
@@ -267,7 +314,7 @@ function retrieve_data(value) {
                     })
                     .entries(data);
 
-                // console.log(sumstat)
+                console.log(sumstat)
 
                 var arr = []
                 data.forEach(function(d) {
@@ -286,7 +333,7 @@ function retrieve_data(value) {
 
                 domainResult = domainRes(arr)
 
-                // console.log(domainResult)
+                console.log(domainResult)
 
                 var line_y = d3.scaleLinear()
                     .domain(domainResult)
@@ -303,6 +350,9 @@ function retrieve_data(value) {
                     .transition()
                     .duration(500)
                     .call(LineyAxis)
+
+
+                console.log(line_y_axis)
 
                 line_y_axis
                     .selectAll("text")
@@ -551,7 +601,7 @@ function retrieve_data(value) {
 
                 dataForDownload = []
                 head = []
-                console.log(data)
+                    // console.log(data)
 
                 try {
                     for (const [key, value] of Object.entries(data[0])) {
@@ -791,34 +841,7 @@ function retrieve_data(value) {
             }
 
 
-            var bar_margin = { top: 10, right: 50, bottom: 10, left: 100 },
-                bar_width = d3.select("#barBlock").node().getBoundingClientRect().width - bar_margin.left - bar_margin.right,
-                bar_height = d3.select("#barBlock").node().getBoundingClientRect().height - bar_margin.top - bar_margin.bottom;
 
-            var bar_svg = d3.select("#barBlock")
-                .append("svg")
-                .attr("width", bar_width + bar_margin.left + bar_margin.right)
-                .attr("height", bar_height + bar_margin.top + bar_margin.bottom)
-                .append("g")
-                .attr("transform",
-                    "translate(" + bar_margin.left + "," + bar_margin.top + ")");
-
-            var bar_y = d3.scaleBand()
-                .range([0, bar_height])
-                .padding(0.2);
-
-            var bar_xAxis = bar_svg.append("g")
-                .attr("transform", "translate(0," + bar_height + ")")
-
-            // Initialize the Y axis
-            var bar_x = d3.scaleLinear()
-                .range([0, bar_width])
-
-
-            var bar_yAxis = bar_svg.append("g")
-                .attr("class", "myYaxis")
-
-            bar_yAxis.call(d3.axisLeft(bar_y))
 
             function drawBar(data) {
 
