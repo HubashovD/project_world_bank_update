@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://d3js.org/d3.v4.js"></script>
     <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/d3-format@3"></script>
 
     <script src="scripts/custom-select.js"></script>
@@ -37,6 +39,10 @@
         </div>
     </div>
 
+    <div id='yearsSelectorWrapper'>
+        <div id='yearsSelector'></div>
+    </div>
+
     <div id='countriesSelectorWrapper'>
         <p style='grid-row:1; grid-column: 1;'>Select a country:</p>
         <div style='grid-row:1; grid-column: 2;'>
@@ -57,12 +63,17 @@
         </div>
     </div>
     <div id='yearPlaceholder'></div>
+    <div id='map_block'></div>
+    <div id="mapTooltip">
+        <p>You can zoom and pan map, hover mouse on map to recieve more data</p>
+    </div>
     <div id='lineBlockWrapper'>
         <div id='lineBlock'></div>
     </div>
 
 
     <script src="scripts/retrieve_data_Rev2.js"></script>
+    <script src='scripts/getMapR2.js'></script>
 
     <script type="text/javascript">
         function menaSelect() {
@@ -101,7 +112,7 @@
 
     <script>
         /* When the user clicks on the button, 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            toggle between hiding and showing the dropdown content */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    toggle between hiding and showing the dropdown content */
         function myFunction() {
             document.getElementById("myDropdown").classList.toggle("show");
         }
