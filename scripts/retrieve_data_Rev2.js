@@ -335,6 +335,11 @@ function retrieve_data(value) {
 
                 console.log(domainResult)
 
+
+
+
+
+
                 var line_y = d3.scaleLinear()
                     .domain(domainResult)
                     .range([line_height, 0]);
