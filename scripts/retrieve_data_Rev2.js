@@ -103,6 +103,21 @@ function retrieve_data(value) {
                                 name: entry.country.value,
                                 id: "HIC"
                             })
+                        } else if (entry.country.value == 'Low income') {
+                            countries.push({
+                                name: entry.country.value,
+                                id: "LIC"
+                            })
+                        } else if (entry.country.value == 'Lower middle income') {
+                            countries.push({
+                                name: entry.country.value,
+                                id: "LMC"
+                            })
+                        } else if (entry.country.value == 'Upper middle income') {
+                            countries.push({
+                                name: entry.country.value,
+                                id: "UMC"
+                            })
                         } else {
                             countries.push({
                                 name: entry.country.value,
@@ -254,11 +269,11 @@ function retrieve_data(value) {
 
             function filterData(data) {
                 console.log('filterData(data)')
-                    // console.log(countries)
+                console.log(countries)
 
                 countries_selected = []
                 countries.forEach(function(d) {
-                    // console.log(d)
+                    console.log(d)
                     var cbb = document.querySelector('#' + d.id);
                     if (cbb.checked == true) {
                         countries_selected.push(cbb.value)
@@ -1126,13 +1141,40 @@ function retrieve_data(value) {
 
 function drawScatter() {
 
-    console.log('drawScatter(')
+    console.log('drawScatter()')
 
     firstC = "NE.EXP.GNFS.ZS" /// set dynamycaly apdaited indicator
     secondC = "NY.GDP.PCAP.CD" /// set dynamycaly apdaited indicator
     year = "2016"
 
     function updateScatter() {
+
+        var list = document.getElementById('scatterBlockWrapper')
+        try {
+            while (list.firstChild) {
+                list.removeChild(list.lastChild);
+            }
+        } catch {}
+
+        il = document.createElement('div');
+        il.id = 'scatterBlock'
+        list.appendChild(il)
+
+
+        // set the dimensions and margins of the graph
+        var scatter_margin = { top: 10, right: 30, bottom: 30, left: 60 },
+            scatter_width = d3.select("#scatterBlock").node().getBoundingClientRect().width - scatter_margin.left - scatter_margin.right,
+            scatter_height = d3.select("#scatterBlock").node().getBoundingClientRect().height - scatter_margin.top - scatter_margin.bottom;
+
+        // append the svg object to the body of the page
+        var scatter_svg = d3.select("#scatterBlock")
+            .append("svg")
+            .attr("width", scatter_width + scatter_margin.left + scatter_margin.right)
+            .attr("height", scatter_height + scatter_margin.top + scatter_margin.bottom)
+            .append("g")
+            .attr("transform",
+                "translate(" + scatter_margin.left + "," + scatter_margin.top + ")");
+
 
         console.log("draw_scatter")
 
@@ -1153,156 +1195,169 @@ function drawScatter() {
 
         var countries_2 = 'AFG;BHR;DZA;COM;DJI;EGY;ERI;ETH;IRN;IRQ;ISR;JOR;KWT;LBN;LBY;MRT;MAR;OMN;PAK;QAT;SAU;SOM;SSD;SDN;SYR;TUN;TUR;ARE;YEM;ARB;BMN;WLD;ARB;LIC;LMC;MIC;UMC;HIC;OED;EAS;EUU;CHN;USA'
 
-        var url = "https://api.worldbank.org/v2/country/" + countries_2 + "/indicator/" + firstC + ";" + secondC + "?source=2&format=json&per_page=3000&date=1900:2022"
-        console.log(url)
+        var url2 = "https://api.worldbank.org/v2/country/" + countries_2 + "/indicator/" + firstC + ";" + secondC + "?source=2&format=json&per_page=1&date=1900:2022"
+        console.log(url2)
 
-        d3.json(url, function(data) {
-            console.log(url)
-            console.log(data)
-
-            try {
-                var parent = document.querySelector('#yearsSelector')
-                console.log(parent)
-                const btn = parent.querySelector('.select__toggle')
-                year = btn.value
-            } catch {}
-            console.log(year)
+        totalRecors = []
+        d3.json(url2, function(testData) {
+            console.log(testData[0].total)
+            totalRecors.push(testData[0].total)
 
 
-            var filteredData = data[1].filter(function(elem) {
-                if (elem.date === year) {
-                    return elem
-                }
-            })
+            var url = "https://api.worldbank.org/v2/country/" + countries_2 + "/indicator/" + firstC + ";" + secondC + "?source=2&format=json&per_page=" + totalRecors[0] + "&date=1900:2022"
 
-            // firstC = "NE.EXP.GNFS.ZS" /// set dynamycaly apdaited indicator
+            d3.json(url, function(data) {
+                console.log(url)
+                console.log(data)
 
-            xScale = []
+                try {
+                    var parent = document.querySelector('#yearsSelector')
+                    console.log(parent)
+                    const btn = parent.querySelector('.select__toggle')
+                    year = btn.value
+                } catch {}
+                console.log(year)
 
-            // secondC = "NY.GDP.PCAP.CD" /// set dynamycaly apdaited indicator
 
-
-            yScale = []
-
-            dataPackage = []
-
-            filteredData.forEach(function(elem) {
-                if (elem.indicator.id === firstC) {
-                    if (elem.value != null) {
-                        row = []
-                        row[firstC] = elem.value
-                        row['firstIndicatorName'] = elem.indicator.value
-                        row['countryId'] = elem.country.id
-                        row['CountryName'] = elem.country.value
-
-                        dataPackage.push(row)
-                        xScale.push(elem.value)
+                var filteredData = data[1].filter(function(elem) {
+                    if (elem.date === year) {
+                        return elem
                     }
-                }
-            })
+                })
 
-            console.log(dataPackage)
+                // firstC = "NE.EXP.GNFS.ZS" /// set dynamycaly apdaited indicator
 
-            filteredData.forEach(function(elem) {
-                if (elem.indicator.id === secondC) {
-                    dataPackage.forEach(function(elemF) {
-                        if (elemF.countryId == elem.country.id) {
-                            if (elem.value != null) {
-                                elemF[secondC] = elem.value
-                                elemF['secondIndicatorName'] = elem.indicator.value
-                                yScale.push(elem.value)
-                            }
+                xScale = []
+
+                // secondC = "NY.GDP.PCAP.CD" /// set dynamycaly apdaited indicator
+
+
+                console.log(filteredData)
+
+                yScale = []
+
+                dataPackage = []
+
+                filteredData.forEach(function(elem) {
+                    if (elem.indicator.id === firstC) {
+                        if (elem.value != null) {
+                            row = []
+                            row[firstC] = elem.value
+                            row['firstIndicatorName'] = elem.indicator.value
+                            row['countryId'] = elem.country.id
+                            row['CountryName'] = elem.country.value
+
+                            dataPackage.push(row)
+                            xScale.push(elem.value)
                         }
-                    })
-                }
-            })
+                    }
+                })
+
+                console.log(dataPackage)
+
+                filteredData.forEach(function(elem) {
+                    if (elem.indicator.id === secondC) {
+                        dataPackage.forEach(function(elemF) {
+                            if (elemF.countryId == elem.country.id) {
+                                if (elem.value != null) {
+                                    elemF[secondC] = elem.value
+                                    elemF['secondIndicatorName'] = elem.indicator.value
+                                    yScale.push(elem.value)
+                                }
+                            }
+                        })
+                    }
+                })
 
 
 
-            dataPackage = dataPackage.filter(function(d) {
-                if (d[firstC] != null && d[secondC] != null) {
-                    console.log(d[firstC])
-                    return d
-                }
-            })
+                dataPackage = dataPackage.filter(function(d) {
+                    console.log(d)
+                    if (d[firstC] != null && d[secondC] != null) {
+                        console.log(d[firstC])
+                        return d
+                    }
+                })
 
 
-            console.log(dataPackage)
+                console.log(dataPackage)
 
-            //Read the data
-            // Add X axis
+                //Read the data
+                // Add X axis
 
-            // SET MAX DOMAIN!!!!!!!!
-            //  x is FIRST!!!!
+                // SET MAX DOMAIN!!!!!!!!
+                //  x is FIRST!!!!
 
-            var x = d3.scaleLinear()
-                .domain([0, d3.max(xScale) + d3.max(xScale) / 20])
-                .range([0, scatter_width]);
-            scatter_svg.append("g")
-                .attr("transform", "translate(0," + scatter_height + ")")
-                .call(d3.axisBottom(x));
+                var x = d3.scaleLinear()
+                    .domain([0, d3.max(xScale) + d3.max(xScale) / 20])
+                    .range([0, scatter_width]);
+                scatter_svg.append("g")
+                    .attr("transform", "translate(0," + scatter_height + ")")
+                    .call(d3.axisBottom(x));
 
-            // Add Y axis
-            // SET MAX DOMAIN!!!!!!!!
-            // y is SECOND!!!!
-            var y = d3.scaleLinear()
-                .domain([0, d3.max(yScale) + d3.max(yScale) / 20])
-                .range([scatter_height, 0]);
-            scatter_svg.append("g")
-                .call(d3.axisLeft(y));
+                // Add Y axis
+                // SET MAX DOMAIN!!!!!!!!
+                // y is SECOND!!!!
+                var y = d3.scaleLinear()
+                    .domain([0, d3.max(yScale) + d3.max(yScale) / 20])
+                    .range([scatter_height, 0]);
+                scatter_svg.append("g")
+                    .call(d3.axisLeft(y));
 
-            // Add a tooltip div. Here I define the general feature of the tooltip: stuff that do not depend on the data point.
-            // Its opacity is set to 0: we don't see it by default.
-            var tooltip = d3.select("#scatterBlock")
-                .append("div")
-                .style("opacity", 0)
-                .attr("class", "tooltip")
-                .style("background-color", "white")
-                .style("border", "solid")
-                .style("border-width", "1px")
-                .style("border-radius", "5px")
-                .style("padding", "10px")
-
-
-
-            // A function that change this tooltip when the user hover a point.
-            // Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
-            var mouseover = function(d) {
-                tooltip
-                    .style("opacity", 1)
-            }
-
-            var mousemove = function(d) {
-                tooltip
-                    .html(d['CountryName'] + "<br>" + d["secondIndicatorName"] + ": " + d[secondC] + "<br>" + d["firstIndicatorName"] + ": " + d[firstC])
-                    .style("left", (d3.mouse(this)[0] + 90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-                    .style("top", (d3.mouse(this)[1]) + "px")
-            }
-
-            // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
-            var mouseleave = function(d) {
-                tooltip
-                    .transition()
-                    .duration(200)
+                // Add a tooltip div. Here I define the general feature of the tooltip: stuff that do not depend on the data point.
+                // Its opacity is set to 0: we don't see it by default.
+                var tooltip = d3.select("#scatterBlock")
+                    .append("div")
                     .style("opacity", 0)
-            }
+                    .attr("class", "tooltip")
+                    .style("background-color", "white")
+                    .style("border", "solid")
+                    .style("border-width", "1px")
+                    .style("border-radius", "5px")
+                    .style("padding", "10px")
 
-            // Add dots
-            scatter_svg.append('g')
-                .selectAll("dot")
-                .data(dataPackage.filter(function(d, i) { return i < 50 })) // the .filter part is just to keep a few dots on the chart, not all of them
-                .enter()
-                .append("circle")
-                .attr("cx", function(d) { return x(d[firstC]); })
-                .attr("cy", function(d) { return y(d[secondC]); })
-                .attr("r", 7)
-                .style("fill", "#69b3a2")
-                .style("opacity", 0.3)
-                .style("stroke", "white")
-                .on("mouseover", mouseover)
-                .on("mousemove", mousemove)
-                .on("mouseleave", mouseleave)
 
+
+                // A function that change this tooltip when the user hover a point.
+                // Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
+                var mouseover = function(d) {
+                    tooltip
+                        .style("opacity", 1)
+                }
+
+                var mousemove = function(d) {
+                    tooltip
+                        .html(d['CountryName'] + "<br>" + d["secondIndicatorName"] + ": " + d[secondC] + "<br>" + d["firstIndicatorName"] + ": " + d[firstC])
+                        .style("left", (d3.mouse(this)[0] + 90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+                        .style("top", (d3.mouse(this)[1]) + "px")
+                }
+
+                // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
+                var mouseleave = function(d) {
+                    tooltip
+                        .transition()
+                        .duration(200)
+                        .style("opacity", 0)
+                }
+
+                // Add dots
+                scatter_svg.append('g')
+                    .selectAll("dot")
+                    .data(dataPackage.filter(function(d, i) { return i < 50 })) // the .filter part is just to keep a few dots on the chart, not all of them
+                    .enter()
+                    .append("circle")
+                    .attr("cx", function(d) { return x(d[firstC]); })
+                    .attr("cy", function(d) { return y(d[secondC]); })
+                    .attr("r", 7)
+                    .style("fill", "#69b3a2")
+                    .style("opacity", 0.3)
+                    .style("stroke", "white")
+                    .on("mouseover", mouseover)
+                    .on("mousemove", mousemove)
+                    .on("mouseleave", mouseleave)
+
+
+            })
 
         })
 
@@ -1311,7 +1366,7 @@ function drawScatter() {
 
 
     console.log('add event listener draw scatter')
-    document.querySelector('#addIndicatorsSelector').addEventListener('select1.change', (e) => {
+    document.querySelector('#addIndicatorsSelector').addEventListener('select.change', (e) => {
         console.log(e)
         console.log('Change add indicator')
         updateScatter()
@@ -1320,8 +1375,8 @@ function drawScatter() {
 drawScatter()
 
 function addIndicatorsSelector(categoryList) {
-    // console.log(categoryList)
-    // console.log("Hello!")
+    console.log(categoryList)
+        // console.log("Hello!")
 
     function update(option) {
         console.log(option)
@@ -1344,12 +1399,12 @@ function addIndicatorsSelector(categoryList) {
                 })
                 // console.log(result)
             result.forEach(function(d) {
-                    singleIndicator = []
-                    singleIndicator.push(d.id)
-                    singleIndicator.push(d.Indicator)
-                    indicatorsList.push(singleIndicator)
-                })
-                // console.log(indicatorsList)
+                singleIndicator = []
+                singleIndicator.push(d.id)
+                singleIndicator.push(d.Indicator)
+                indicatorsList.push(singleIndicator)
+            })
+            console.log(indicatorsList)
             addIndicatorsSelector = new CustomSelect('#addIndicatorsSelector', {
                 name: indicatorsList[0][1],
                 targetValue: indicatorsList[0][0],
@@ -1362,6 +1417,7 @@ function addIndicatorsSelector(categoryList) {
     document.querySelector('#addCategorySelector').addEventListener('select.change', (e) => {
         const btn = e.target.querySelector('.select__toggle');
         update(btn.value)
+        drawScatter()
     });
 }
 
