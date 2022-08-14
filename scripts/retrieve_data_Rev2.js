@@ -31,9 +31,6 @@ var bar_yAxis = bar_svg.append("g")
 bar_yAxis.call(d3.axisLeft(bar_y))
 
 
-
-
-
 // scatter initialize
 
 // set the dimensions and margins of the graph
@@ -936,8 +933,6 @@ function retrieve_data(value) {
             }
             drawMap(cleanData)
 
-
-
             function drawBar(data) {
 
 
@@ -1085,9 +1080,6 @@ function retrieve_data(value) {
 
             }
             drawBar(cleanData)
-
-
-
 
 
             document.querySelector('#yearsSelector').addEventListener('select.change', (e) => {
@@ -1369,6 +1361,18 @@ function drawScatter() {
     document.querySelector('#addIndicatorsSelector').addEventListener('select.change', (e) => {
         console.log(e)
         console.log('Change add indicator')
+        updateScatter()
+    });
+
+    document.querySelector('#yearsSelector').addEventListener('select1.change', (e) => {
+        const btn = e.target.querySelector('.select__toggle');
+        console.log(`Выбранное значение: ${btn.value}`);
+        updateScatter()
+    });
+
+    document.querySelector('#categorySelector').addEventListener('select2.change', (e) => {
+        const btn = e.target.querySelector('.select__toggle');
+        console.log(`Выбранное значение: ${btn.value}`);
         updateScatter()
     });
 }
