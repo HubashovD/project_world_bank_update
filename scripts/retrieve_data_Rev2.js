@@ -34,7 +34,7 @@ bar_yAxis.call(d3.axisLeft(bar_y))
 // scatter initialize
 
 // set the dimensions and margins of the graph
-var scatter_margin = { top: 10, right: 30, bottom: 30, left: 60 },
+var scatter_margin = { top: 10, right: 30, bottom: 50, left: 60 },
     scatter_width = d3.select("#scatterBlock").node().getBoundingClientRect().width - scatter_margin.left - scatter_margin.right,
     scatter_height = d3.select("#scatterBlock").node().getBoundingClientRect().height - scatter_margin.top - scatter_margin.bottom;
 
@@ -791,6 +791,45 @@ function retrieve_data(value) {
 
 
 
+
+
+                legend_block = document.getElementById('legend_block')
+
+                try {
+                    while (legend_block.firstChild) {
+                        legend_block.removeChild(legend_block.lastChild);
+                    }
+                } catch {}
+
+                console.log(countries)
+
+
+                if (sumstat.length >= 32) {
+                    legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + Math.round(sumstat.length / 4) + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
+                } else if (sumstat.length >= 15) {
+                    legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + Math.round(sumstat.length / 2) + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
+                } else if (sumstat.length >= 10) {
+                    legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + Math.round(sumstat.length / 2) + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
+                } else {
+                    legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + sumstat.length + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
+                }
+
+                sumstat.forEach(country => {
+                    legendElement = document.createElement('div');
+                    colorSquare = document.createElement('div');
+                    legendText = document.createElement('p');
+                    legendText.innerHTML = country.key
+                    colorSquare.style.cssText = "height: 10px; width: 10px; background-color:" + color(country.key) + "; height: 12px;"
+                    legendElement.style.cssText = "display: grid; grid-template-columns: 1fr 95%; align-items: center; height: 12px;"
+                    legend_block.appendChild(legendElement)
+                    legendElement.appendChild(colorSquare)
+                    legendElement.appendChild(legendText)
+
+                })
+
+
+
+
             }
             filterData(cleanData)
 
@@ -1154,7 +1193,7 @@ function drawScatter() {
 
 
         // set the dimensions and margins of the graph
-        var scatter_margin = { top: 10, right: 30, bottom: 30, left: 60 },
+        var scatter_margin = { top: 10, right: 30, bottom: 50, left: 60 },
             scatter_width = d3.select("#scatterBlock").node().getBoundingClientRect().width - scatter_margin.left - scatter_margin.right,
             scatter_height = d3.select("#scatterBlock").node().getBoundingClientRect().height - scatter_margin.top - scatter_margin.bottom;
 
@@ -1182,6 +1221,10 @@ function drawScatter() {
             secondC = parentIndicator.querySelector('.select__toggle').value
             console.log("secondC : " + secondC)
         } catch { secondC = "NY.GDP.PCAP.CD" }
+
+
+
+
 
 
 
@@ -1230,6 +1273,9 @@ function drawScatter() {
 
                 dataPackage = []
 
+                firstIndicatorName = []
+                secondIndicatorName = []
+
                 filteredData.forEach(function(elem) {
                     if (elem.indicator.id === firstC) {
                         if (elem.value != null) {
@@ -1241,6 +1287,7 @@ function drawScatter() {
 
                             dataPackage.push(row)
                             xScale.push(elem.value)
+                            if (firstIndicatorName.includes(elem.indicator.value)) {} else { firstIndicatorName.push(elem.indicator.value) }
                         }
                     }
                 })
@@ -1255,11 +1302,28 @@ function drawScatter() {
                                     elemF[secondC] = elem.value
                                     elemF['secondIndicatorName'] = elem.indicator.value
                                     yScale.push(elem.value)
+                                    if (secondIndicatorName.includes(elem.indicator.value)) {} else { secondIndicatorName.push(elem.indicator.value) }
                                 }
                             }
                         })
                     }
                 })
+
+
+                // Add X axis label:
+                scatter_svg.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("x", scatter_width / 2 + scatter_margin.left)
+                    .attr("y", scatter_height + scatter_margin.top + 20)
+                    .text(firstIndicatorName[0]);
+
+                // Y axis label:
+                scatter_svg.append("text")
+                    .attr("text-anchor", "end")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", -scatter_margin.left + 20)
+                    .attr("x", -scatter_margin.top - scatter_height / 2 + 20)
+                    .text(secondIndicatorName[0])
 
 
 
@@ -1349,6 +1413,8 @@ function drawScatter() {
                     .on("mouseleave", mouseleave)
 
 
+
+
             })
 
         })
@@ -1365,12 +1431,6 @@ function drawScatter() {
     });
 
     document.querySelector('#yearsSelector').addEventListener('select1.change', (e) => {
-        const btn = e.target.querySelector('.select__toggle');
-        console.log(`Выбранное значение: ${btn.value}`);
-        updateScatter()
-    });
-
-    document.querySelector('#categorySelector').addEventListener('select2.change', (e) => {
         const btn = e.target.querySelector('.select__toggle');
         console.log(`Выбранное значение: ${btn.value}`);
         updateScatter()
@@ -1470,6 +1530,7 @@ function indicatorsSelector(categoryList) {
     document.querySelector('#categorySelector').addEventListener('select.change', (e) => {
         const btn = e.target.querySelector('.select__toggle');
         update(btn.value)
+        drawScatter()
     });
 }
 
