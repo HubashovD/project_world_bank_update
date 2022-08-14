@@ -5,7 +5,7 @@ body {
 }
 
 #totalBoby {
-    width: 1000px;
+    width: 800px;
 }
 
 #countriesSelectorWrapper {
@@ -227,9 +227,22 @@ body {
     width: 5px;
 }
 
+#legend_block {
+    width: fit-content;
+    align-self: center;
+    grid-auto-flow: column;
+    align-items: center;
+    grid-row: 5;
+    grid-column-start: 1;
+    grid-column-end: -1;
+}
+
+#legend_block div p {
+    font: 14px 'serifRegular';
+}
+
 #downloadButtonDiv {
-    display: grid;
-    grid-template-columns: auto;
+    margin-top: 50px;
 }
 
 #downloadButton {
