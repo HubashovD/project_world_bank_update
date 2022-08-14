@@ -1,4 +1,7 @@
-var bar_margin = { top: 10, right: 50, bottom: 10, left: 100 },
+// initialize the bargraph
+
+
+var bar_margin = { top: 10, right: 50, bottom: 20, left: 100 },
     bar_width = d3.select("#barBlock").node().getBoundingClientRect().width - bar_margin.left - bar_margin.right,
     bar_height = d3.select("#barBlock").node().getBoundingClientRect().height - bar_margin.top - bar_margin.bottom;
 
@@ -26,6 +29,26 @@ var bar_yAxis = bar_svg.append("g")
     .attr("class", "myYaxis")
 
 bar_yAxis.call(d3.axisLeft(bar_y))
+
+
+
+
+
+// scatter initialize
+
+// set the dimensions and margins of the graph
+var scatter_margin = { top: 10, right: 30, bottom: 30, left: 60 },
+    scatter_width = d3.select("#scatterBlock").node().getBoundingClientRect().width - scatter_margin.left - scatter_margin.right,
+    scatter_height = d3.select("#scatterBlock").node().getBoundingClientRect().height - scatter_margin.top - scatter_margin.bottom;
+
+// append the svg object to the body of the page
+var scatter_svg = d3.select("#scatterBlock")
+    .append("svg")
+    .attr("width", scatter_width + scatter_margin.left + scatter_margin.right)
+    .attr("height", scatter_height + scatter_margin.top + scatter_margin.bottom)
+    .append("g")
+    .attr("transform",
+        "translate(" + scatter_margin.left + "," + scatter_margin.top + ")");
 
 
 function retrieve_data(value) {
@@ -95,7 +118,7 @@ function retrieve_data(value) {
 
             })
 
-            console.log(yearsList)
+
             console.log(menaCountriesNames)
 
             var list = document.getElementById('countriesSelector')
@@ -112,8 +135,9 @@ function retrieve_data(value) {
                 opt.innerHTML = element.name
                 opt.value = element.id
                 opt.classList.add('custom-checkbox')
-                if (menaCountriesNames.includes(element)) {
+                if (menaCountriesNames.includes(element.name)) {
                     opt.classList.add('menaCountry')
+                    opt.checked = true
                 } else {}
                 opt.type = "checkbox"
                 opt.name = "ck"
@@ -171,7 +195,7 @@ function retrieve_data(value) {
             il.id = 'yearsSelector'
             list.appendChild(il)
 
-            unique_years.sort().forEach((d) => {
+            unique_years.sort((a, b) => b - a).forEach((d) => {
                 if (yearsList.includes(d)) {
 
                 } else {
@@ -188,7 +212,7 @@ function retrieve_data(value) {
                 options: yearsList,
             })
 
-
+            console.log(yearsList)
 
             var line_x = d3.scaleBand()
                 .domain(d3.extent(unique_years, function(d) {
@@ -257,6 +281,57 @@ function retrieve_data(value) {
                 data = filteredData
 
                 console.log(filteredData)
+
+
+                // update years filter
+
+                // try {
+                //     var unique_years = []
+
+                //     var yearsList = []
+
+                //     data.forEach((d) => {
+                //         // console.log(d.year
+
+                //         if (unique_years.includes(d.date)) {
+
+                //         } else { unique_years.push(d.date) }
+                //     })
+
+                //     console.log(unique_years)
+
+                //     var list = document.getElementById('yearSelectorBlock')
+                //     try {
+                //         while (list.firstChild) {
+                //             list.removeChild(list.lastChild);
+                //         }
+                //     } catch {}
+                //     il = document.createElement('div');
+                //     il.id = 'yearsSelector'
+                //     list.appendChild(il)
+
+                //     unique_years.sort().forEach((d) => {
+                //         if (yearsList.includes(d)) {
+
+                //         } else {
+                //             singleYear = []
+                //             singleYear.push(d)
+                //             singleYear.push(d)
+                //             yearsList.push(singleYear)
+                //         }
+                //     })
+
+                //     yearsSelector = new CustomSelect('#yearsSelector', {
+                //         name: yearsList[0][1],
+                //         targetValue: yearsList[0][0],
+                //         options: yearsList,
+                //     })
+
+                //     console.log(yearsList)
+                // } catch {}
+
+
+
 
                 var color = d3.scaleOrdinal()
                     .domain(data)
@@ -844,7 +919,7 @@ function retrieve_data(value) {
 
 
             }
-
+            drawMap(cleanData)
 
 
 
@@ -996,7 +1071,9 @@ function retrieve_data(value) {
             }
             drawBar(cleanData)
 
-            function drawScatter(data) {}
+
+
+
 
             document.querySelector('#yearsSelector').addEventListener('select.change', (e) => {
                 const btn = e.target.querySelector('.select__toggle');
@@ -1047,6 +1124,246 @@ function retrieve_data(value) {
 }
 
 
+function drawScatter() {
+
+    console.log('drawScatter(')
+
+    firstC = "NE.EXP.GNFS.ZS" /// set dynamycaly apdaited indicator
+    secondC = "NY.GDP.PCAP.CD" /// set dynamycaly apdaited indicator
+    year = "2016"
+
+    function updateScatter() {
+
+        console.log("draw_scatter")
+
+        try {
+            parentIndicator = document.querySelector('#indicatorsSelector')
+            firstC = parentIndicator.querySelector('.select__toggle').value
+
+            console.log("firstC: " + firstC)
+        } catch { firstC = "NE.EXP.GNFS.ZS" }
+
+        try {
+            parentIndicator = document.querySelector('#addIndicatorsSelector')
+            secondC = parentIndicator.querySelector('.select__toggle').value
+            console.log("secondC : " + secondC)
+        } catch { secondC = "NY.GDP.PCAP.CD" }
+
+
+
+        var countries_2 = 'AFG;BHR;DZA;COM;DJI;EGY;ERI;ETH;IRN;IRQ;ISR;JOR;KWT;LBN;LBY;MRT;MAR;OMN;PAK;QAT;SAU;SOM;SSD;SDN;SYR;TUN;TUR;ARE;YEM;ARB;BMN;WLD;ARB;LIC;LMC;MIC;UMC;HIC;OED;EAS;EUU;CHN;USA'
+
+        var url = "https://api.worldbank.org/v2/country/" + countries_2 + "/indicator/" + firstC + ";" + secondC + "?source=2&format=json&per_page=3000&date=1900:2022"
+        console.log(url)
+
+        d3.json(url, function(data) {
+            console.log(url)
+            console.log(data)
+
+            try {
+                var parent = document.querySelector('#yearsSelector')
+                console.log(parent)
+                const btn = parent.querySelector('.select__toggle')
+                year = btn.value
+            } catch {}
+            console.log(year)
+
+
+            var filteredData = data[1].filter(function(elem) {
+                if (elem.date === year) {
+                    return elem
+                }
+            })
+
+            // firstC = "NE.EXP.GNFS.ZS" /// set dynamycaly apdaited indicator
+
+            xScale = []
+
+            // secondC = "NY.GDP.PCAP.CD" /// set dynamycaly apdaited indicator
+
+
+            yScale = []
+
+            dataPackage = []
+
+            filteredData.forEach(function(elem) {
+                if (elem.indicator.id === firstC) {
+                    if (elem.value != null) {
+                        row = []
+                        row[firstC] = elem.value
+                        row['firstIndicatorName'] = elem.indicator.value
+                        row['countryId'] = elem.country.id
+                        row['CountryName'] = elem.country.value
+
+                        dataPackage.push(row)
+                        xScale.push(elem.value)
+                    }
+                }
+            })
+
+            console.log(dataPackage)
+
+            filteredData.forEach(function(elem) {
+                if (elem.indicator.id === secondC) {
+                    dataPackage.forEach(function(elemF) {
+                        if (elemF.countryId == elem.country.id) {
+                            if (elem.value != null) {
+                                elemF[secondC] = elem.value
+                                elemF['secondIndicatorName'] = elem.indicator.value
+                                yScale.push(elem.value)
+                            }
+                        }
+                    })
+                }
+            })
+
+
+
+            dataPackage = dataPackage.filter(function(d) {
+                if (d[firstC] != null && d[secondC] != null) {
+                    console.log(d[firstC])
+                    return d
+                }
+            })
+
+
+            console.log(dataPackage)
+
+            //Read the data
+            // Add X axis
+
+            // SET MAX DOMAIN!!!!!!!!
+            //  x is FIRST!!!!
+
+            var x = d3.scaleLinear()
+                .domain([0, d3.max(xScale) + d3.max(xScale) / 20])
+                .range([0, scatter_width]);
+            scatter_svg.append("g")
+                .attr("transform", "translate(0," + scatter_height + ")")
+                .call(d3.axisBottom(x));
+
+            // Add Y axis
+            // SET MAX DOMAIN!!!!!!!!
+            // y is SECOND!!!!
+            var y = d3.scaleLinear()
+                .domain([0, d3.max(yScale) + d3.max(yScale) / 20])
+                .range([scatter_height, 0]);
+            scatter_svg.append("g")
+                .call(d3.axisLeft(y));
+
+            // Add a tooltip div. Here I define the general feature of the tooltip: stuff that do not depend on the data point.
+            // Its opacity is set to 0: we don't see it by default.
+            var tooltip = d3.select("#scatterBlock")
+                .append("div")
+                .style("opacity", 0)
+                .attr("class", "tooltip")
+                .style("background-color", "white")
+                .style("border", "solid")
+                .style("border-width", "1px")
+                .style("border-radius", "5px")
+                .style("padding", "10px")
+
+
+
+            // A function that change this tooltip when the user hover a point.
+            // Its opacity is set to 1: we can now see it. Plus it set the text and position of tooltip depending on the datapoint (d)
+            var mouseover = function(d) {
+                tooltip
+                    .style("opacity", 1)
+            }
+
+            var mousemove = function(d) {
+                tooltip
+                    .html(d['CountryName'] + "<br>" + d["secondIndicatorName"] + ": " + d[secondC] + "<br>" + d["firstIndicatorName"] + ": " + d[firstC])
+                    .style("left", (d3.mouse(this)[0] + 90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+                    .style("top", (d3.mouse(this)[1]) + "px")
+            }
+
+            // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
+            var mouseleave = function(d) {
+                tooltip
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0)
+            }
+
+            // Add dots
+            scatter_svg.append('g')
+                .selectAll("dot")
+                .data(dataPackage.filter(function(d, i) { return i < 50 })) // the .filter part is just to keep a few dots on the chart, not all of them
+                .enter()
+                .append("circle")
+                .attr("cx", function(d) { return x(d[firstC]); })
+                .attr("cy", function(d) { return y(d[secondC]); })
+                .attr("r", 7)
+                .style("fill", "#69b3a2")
+                .style("opacity", 0.3)
+                .style("stroke", "white")
+                .on("mouseover", mouseover)
+                .on("mousemove", mousemove)
+                .on("mouseleave", mouseleave)
+
+
+        })
+
+    }
+    updateScatter()
+
+
+    console.log('add event listener draw scatter')
+    document.querySelector('#addIndicatorsSelector').addEventListener('select1.change', (e) => {
+        console.log(e)
+        console.log('Change add indicator')
+        updateScatter()
+    });
+}
+drawScatter()
+
+function addIndicatorsSelector(categoryList) {
+    // console.log(categoryList)
+    // console.log("Hello!")
+
+    function update(option) {
+        console.log(option)
+
+        var list = document.getElementById('addIndicatorsSelectorBlock')
+        try {
+            while (list.firstChild) {
+                list.removeChild(list.lastChild);
+            }
+        } catch {}
+        il = document.createElement('div');
+        il.id = 'addIndicatorsSelector'
+        list.appendChild(il)
+
+        d3.csv('data/indicators.csv', function(indicators) {
+            // console.log(indicators)
+            indicatorsList = []
+            result = indicators.filter((element) => {
+                    return element.Category == option
+                })
+                // console.log(result)
+            result.forEach(function(d) {
+                    singleIndicator = []
+                    singleIndicator.push(d.id)
+                    singleIndicator.push(d.Indicator)
+                    indicatorsList.push(singleIndicator)
+                })
+                // console.log(indicatorsList)
+            addIndicatorsSelector = new CustomSelect('#addIndicatorsSelector', {
+                name: indicatorsList[0][1],
+                targetValue: indicatorsList[0][0],
+                options: indicatorsList,
+            })
+        })
+    }
+    update(categoryList)
+
+    document.querySelector('#addCategorySelector').addEventListener('select.change', (e) => {
+        const btn = e.target.querySelector('.select__toggle');
+        update(btn.value)
+    });
+}
 
 
 function indicatorsSelector(categoryList) {
@@ -1095,6 +1412,25 @@ function indicatorsSelector(categoryList) {
         update(btn.value)
     });
 }
+
+
+function addCategorySelector() {
+    var categoryList = [
+        ['Economy & Growth', 'Economy & Growth'],
+        ['Poverty', 'Poverty'],
+        ['Social Protection & Labor', 'Social Protection & Labor'],
+        ['Environment', 'Environment']
+    ]
+
+    addCategorySelector = new CustomSelect('#addCategorySelector', {
+        name: categoryList[0][1],
+        targetValue: categoryList[0][0],
+        options: categoryList,
+    })
+
+    addIndicatorsSelector(categoryList[0][0])
+}
+addCategorySelector()
 
 
 function categorySelector() {
