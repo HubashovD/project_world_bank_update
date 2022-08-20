@@ -107,6 +107,20 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
+.selectButtons {
+    background-color: #fff;
+    height: 30px;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    border-radius: 5px;
+    border: solid 1px #ccc;
+    margin-bottom: 1% !important;
+}
+
+.selectButtons:active {
+    background-color: #a7cc33;
+}
+
 #categorySelectorWrapper {
     display: grid;
     grid-column: 1;
@@ -186,6 +200,14 @@ body {
     height: fit-content;
     min-height: 25px;
     grid-column: 2;
+}
+
+#mapTooltip {
+    background-color: #fff;
+    font: 14px;
+    font-family: 'Montserrat', sans-serif;
+    color: #444444;
+    justify-content: center;
 }
 
 #barBlockWrapper {
