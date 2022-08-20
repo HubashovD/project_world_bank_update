@@ -591,6 +591,19 @@ function retrieve_data(value) {
                         text = []
                         barData = []
 
+
+                        // .text(function(d) {
+                        //     // console.log(d)
+                        //     if (d.value > 1.0) {
+                        //         return f(d.value)
+                        //     } else if (d.value < 0) {
+                        //         return f(d.value)
+                        //     } else if (d.value < 1.0 && d.value > 0) {
+                        //         return d.value.toFixed(2)
+                        //     }
+
+
+
                         tooltip
                             .style("opacity", 1)
                             .style("left", (d3.mouse(this)[0] + 50) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
@@ -611,7 +624,7 @@ function retrieve_data(value) {
                                                 year: d.__data__.date
                                             })
 
-                                            if (d.__data__.value < 1.0) {
+                                            if (d.__data__.value < 1.0 && d.__data__.value > 0) {
                                                 var val = +d.__data__.value
                                             } else {
                                                 var val = f(+d.__data__.value)
@@ -809,15 +822,15 @@ function retrieve_data(value) {
                     // console.log(countries)
 
 
-                    if (sumstat.length >= 32) {
-                        legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + Math.round(sumstat.length / 4) + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
-                    } else if (sumstat.length >= 15) {
-                        legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + Math.round(sumstat.length / 2) + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
-                    } else if (sumstat.length >= 10) {
-                        legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + Math.round(sumstat.length / 2) + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
-                    } else {
-                        legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + sumstat.length + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
-                    }
+                    // if (sumstat.length >= 32) {
+                    //     legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + Math.round(sumstat.length / 4) + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
+                    // } else if (sumstat.length >= 15) {
+                    //     legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + Math.round(sumstat.length / 2) + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
+                    // } else if (sumstat.length >= 10) {
+                    //     legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + Math.round(sumstat.length / 2) + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
+                    // } else {
+                    //     legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + sumstat.length + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
+                    // }
 
                     sumstat.forEach(country => {
                         legendElement = document.createElement('div');
@@ -1053,6 +1066,10 @@ function retrieve_data(value) {
 
                     bar_yAxis.call(d3.axisLeft(bar_y))
 
+                    bar_yAxis
+                        .style('font', '10px')
+                        .style("font-family", "'Montserrat', sans-serif")
+
 
                     // Update the Y axis
                     bar_x.domain(domainResult)
@@ -1063,12 +1080,23 @@ function retrieve_data(value) {
 
                     bar_xAxis
                         .selectAll("text")
-                        .style('font', '10px "serifRegular"')
-                        .style('fill', 'red')
+                        .style('font', '10px')
+                        .style("font-family", "'Montserrat', sans-serif")
+                        .style('fill', 'white')
                         .text(function(d) {
-                            // console.log(f(d))
+                            console.log
+                                // console.log(f(d))
                             return f(d)
                         })
+
+                    bar_xAxis
+                        .selectAll("path")
+                        .style('opacity', '0')
+
+                    bar_xAxis
+                        .selectAll("g")
+                        .style('opacity', '0')
+
 
                     // console.log(bar_xAxis)
 
@@ -1120,8 +1148,10 @@ function retrieve_data(value) {
                         .transition() // and apply changes to all of them
                         .duration(10)
                         .attr("x", (function(d) { return bar_x(d.value); }))
-                        .attr("y", function(d) { return bar_y(d.country.value) + (bar_y.bandwidth() / 2) + 3; })
+                        .attr("y", function(d) { return bar_y(d.country.value); }) //+ (bar_y.bandwidth() / 2)
                         .attr("dy", ".75em")
+                        .style('font', '10px')
+                        .style("font-family", "'Montserrat', sans-serif")
                         .text(function(d) {
                             // console.log(d)
                             if (d.value > 1.0) {
@@ -1494,9 +1524,9 @@ function drawScatter(secondC = undefined, firstC = undefined) {
                     .attr("cx", function(d) { return x(d[firstC]); })
                     .attr("cy", function(d) { return y(d[secondC]); })
                     .attr("r", 7)
-                    .style("fill", "#69b3a2")
-                    .style("opacity", 0.3)
-                    .style("stroke", "white")
+                    .style("fill", "#a7cc33")
+                    .style("opacity", 0.8)
+                    .style("stroke", "none")
                     .on("mouseover", mouseover)
                     .on("mousemove", mousemove)
                     .on("mouseleave", mouseleave)
