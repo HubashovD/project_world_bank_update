@@ -18,60 +18,68 @@
 
 <body>
     <div id='totalBoby'>
-        <div id='categorySelectorWrapper'>
-            <p>Category:</p>
-            <div id='categorySelectorBlock'>
-                <div id='categorySelector' style="font-size: 14px;
+        <div style='box-shadow: 1px 1px 5px rgb(105, 105, 105); padding: 5px 10px; border-radius: 10px;'>
+            <div id='categorySelectorWrapper'>
+                <p>Category:</p>
+                <div id='categorySelectorBlock'>
+                    <div id='categorySelector' style="font-size: 14px;
             font-family: 'Montserrat', sans-serif;
             color: #444444;">loading...</div>
+                </div>
             </div>
-        </div>
 
-        <div id='indicatorsSelectorWrapper'>
-            <p> Indicator:</p>
-            <div id='indicatorsSelectorBlock'>
-                <div id='indicatorsSelector' style="font-size: 14px;
+            <div id='indicatorsSelectorWrapper'>
+                <p> Indicator:</p>
+                <div id='indicatorsSelectorBlock'>
+                    <div id='indicatorsSelector' style="font-size: 14px;
             font-family: 'Montserrat', sans-serif;
             color: #444444;">loading...</div>
+                </div>
             </div>
-        </div>
 
-        <div id='yearsSelectorWrapper'>
-            <p> Year:</p>
-            <div id='yearSelectorBlock'>
-                <div id='yearsSelector' style="font-size: 14px;
+            <div id='yearsSelectorWrapper'>
+                <p> Year:</p>
+                <div id='yearSelectorBlock'>
+                    <div id='yearsSelector' style="font-size: 14px;
                 font-family: 'Montserrat', sans-serif;
                 color: #444444;">loading...</div>
-            </div>
-        </div>
-
-        <div id='countriesSelectorWrapper'>
-            <p style='grid-row:1; grid-column: 1;'>Country:</p>
-            <div style='grid-row:1; grid-column: 2;'>
-                <div id='forAfter'>
-                    <button onclick="myFunction()" class="dropbtn">Select the country</button>
-                    <img id='checkSvg' src="https://raw.githubusercontent.com/HubashovD/UNSDG/b200a2d5d121cb469550bc24d6ae75e21a34fd96/web/pic/check.svg">
                 </div>
-                <div id="myDropdown" class="dropdown-content">
-                    <div id='selectedButtons'>
-                        <input type="button" onclick='selects()' value="Select All" id="selectAllButton" class="selectButtons" />
-                        <input type="button" onclick='deSelect()' value="Deselect All" id="deSelectAllButton" class="selectButtons" />
-                        <input type="button" onclick='menaSelect()' value="Select MENA" id="menaSelectButton" class="selectButtons" />
+            </div>
+
+            <div id='countriesSelectorWrapper'>
+                <p style='grid-row:1; grid-column: 1;'>Country:</p>
+                <div style='grid-row:1; grid-column: 2;'>
+                    <div id='forAfter'>
+                        <button onclick="myFunction()" class="dropbtn">Select the country</button>
+                        <img id='checkSvg' src="https://raw.githubusercontent.com/HubashovD/UNSDG/b200a2d5d121cb469550bc24d6ae75e21a34fd96/web/pic/check.svg">
                     </div>
-                    <div id='countriesSelector' style="font-size: 14px;
+                    <div id="myDropdown" class="dropdown-content">
+                        <div id='selectedButtons'>
+                            <input type="button" onclick='selects()' value="Select All" id="selectAllButton" class="selectButtons" />
+                            <input type="button" onclick='deSelect()' value="Deselect All" id="deSelectAllButton" class="selectButtons" />
+                            <input type="button" onclick='menaSelect()' value="Select MENA" id="menaSelectButton" class="selectButtons" />
+                        </div>
+                        <div id='countriesSelector' style="font-size: 14px;
                 font-family: 'Montserrat', sans-serif;
                 color: #444444;"> loading...</div>
+                    </div>
                 </div>
             </div>
         </div>
         <div id='yearPlaceholder'></div>
-        <div id='map_block'></div>
-        <div id="mapTooltip">
-            <p>You can zoom and pan map, hover mouse on map to recieve more data</p>
+        <div style='box-shadow: 1px 1px 5px rgb(105, 105, 105); padding: 5px 10px; border-radius: 10px;'>
+            <div id='map_block'></div>
+            <div id="mapTooltip">
+                <p>You can zoom and pan map, hover mouse on map to recieve more data</p>
+            </div>
         </div>
+    </div>
+    <div style='box-shadow: 1px 1px 5px rgb(105, 105, 105); padding: 5px 10px; border-radius: 10px; margin-top: 20px;'>
         <div id='barBlockWrapper'>
             <div id='barBlock'> </div>
         </div>
+    </div>
+    <div style='box-shadow: 1px 1px 5px rgb(105, 105, 105); padding: 5px 10px; border-radius: 10px; margin-top: 20px;'>
         <div style="font-family: 'Montserrat', sans-serif; font: 14px; margin-bottom: 10px; margin: auto;">
             Select additional indicator to compare:
             <div id='addCategorySelector'></div>
@@ -82,15 +90,17 @@
         <div id='scatterBlockWrapper'>
             <div id="scatterBlock"></div>
         </div>
+    </div>
+    <div style='box-shadow: 1px 1px 5px rgb(105, 105, 105); padding: 5px 10px; border-radius: 10px; margin-top: 20px;'>
         <div id='lineBlockWrapper'>
             <div id='lineBlock'></div>
         </div>
 
         <div id="legend_block"> </div>
-
-        <div id='downloadButtonDiv'>
-            <input type="button" value="Download data" id="downloadButton" />
-        </div>
+    </div>
+    <div id='downloadButtonDiv'>
+        <input type="button" value="Download data" id="downloadButton" />
+    </div>
 
     </div>
     <script src="scripts/retrieve_data_Rev2.js"></script>
@@ -133,7 +143,7 @@
 
     <script>
         /* When the user clicks on the button, 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            toggle between hiding and showing the dropdown content */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    toggle between hiding and showing the dropdown content */
         function myFunction() {
             document.getElementById("myDropdown").classList.toggle("show");
         }

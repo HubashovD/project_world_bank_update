@@ -229,8 +229,19 @@ body {
     margin-bottom: 25px;
 }
 
+#addIndicatorsSelectorBlock {
+    margin-top: 15px;
+}
+
 #addCategorySelector {
     margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#addIndicatorsSelector {
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 #scatterBlock {
