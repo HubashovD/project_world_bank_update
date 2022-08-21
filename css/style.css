@@ -6,6 +6,7 @@ body {
 
 #totalBoby {
     width: 100%;
+    margin-top: 25px;
 }
 
 #countriesSelectorWrapper {
@@ -118,6 +119,7 @@ body {
     border-radius: 5px;
     border: solid 1px #ccc;
     margin-bottom: 1% !important;
+    width: 30%;
 }
 
 .selectButtons:active {
@@ -205,6 +207,11 @@ body {
     grid-column: 2;
 }
 
+#yearPlaceholder {
+    font: 14px;
+    font-family: 'Montserrat', sans-serif;
+}
+
 #mapTooltip {
     background-color: #fff;
     font: 14px;
@@ -222,6 +229,10 @@ body {
     margin-bottom: 25px;
 }
 
+#addCategorySelector {
+    margin-top: 10px;
+}
+
 #scatterBlock {
     width: 100%;
     height: 400px;
@@ -233,6 +244,7 @@ body {
 }
 
 #lineBlock {
+    margin-top: 25px;
     position: relative;
     height: 500px;
     width: 100%;

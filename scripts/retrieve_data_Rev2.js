@@ -65,8 +65,6 @@ function retrieve_data(value) {
 
         var year = new Date().getFullYear()
 
-        // console.log(year)
-
         var countries = ['AFG', 'BHR', 'DZA', 'COM', 'DJI', 'EGY', 'ERI', 'ETH', 'IRN', 'IRQ', 'ISR', 'JOR', 'KWT', 'LBN', 'LBY', 'MRT', 'MAR', 'OMN', 'PAK', 'QAT',
             "SAU", "SOM", "SSD", "SDN", "SYR", "TUN", "TUR", "ARE", "YEM", "ARB", "BMN", "WLD", "ARB", "LIC", "LMC", "MIC", "UMC", "HIC", "OED", "EAS", "EUU", "CHN", 'USA'
         ]
@@ -82,13 +80,10 @@ function retrieve_data(value) {
         var url = "https://api.worldbank.org/v2/country/" + countries_2 + "/indicator/" + value + "?source=2&format=json&per_page=1&date=1900:" + year
 
         d3.json(url, function(data) {
-            console.log()
 
             var url2 = "https://api.worldbank.org/v2/country/" + countries_2 + "/indicator/" + value + "?source=2&format=json&per_page=" + data[0].total + "&date=1900:" + year
             console.log(url2)
             d3.json(url2, function(data) {
-
-                // console.log(data[1])
 
 
                 countries = []
@@ -135,9 +130,6 @@ function retrieve_data(value) {
 
                 })
 
-
-                // console.log(menaCountriesNames)
-
                 var list = document.getElementById('countriesSelector')
                 try {
                     while (list.firstChild) {
@@ -176,8 +168,6 @@ function retrieve_data(value) {
                     line_width = d3.select("#lineBlock").node().getBoundingClientRect().width - line_margin.left - line_margin.right,
                     line_height = d3.select("#lineBlock").node().getBoundingClientRect().height - line_margin.top - line_margin.bottom;
 
-                // console.log(line_height)
-
                 var line_svg = d3.select("#lineBlock")
                     .append("svg")
                     .attr("width", line_width + line_margin.left + line_margin.right)
@@ -195,7 +185,6 @@ function retrieve_data(value) {
                 var yearsList = []
 
                 cleanData.forEach((d) => {
-                    // console.log(d.year
 
                     if (unique_years.includes(d.date)) {
 
@@ -229,8 +218,6 @@ function retrieve_data(value) {
                     options: yearsList,
                 })
 
-                // console.log(yearsList)
-
                 var line_x = d3.scaleBand()
                     .domain(d3.extent(unique_years, function(d) {
                         date = d3.timeParse("%Y")(d)
@@ -261,9 +248,10 @@ function retrieve_data(value) {
                 explainer
                     .text('Hover mouse on the line to the diving in the data ')
                     .attr("x", 0)
-                    .attr("y", -20)
-                    .style('font', '14px "serifRegular"')
+                    .attr("y", -15)
+                    .style('font', '14px')
                     .style('color', '#444444')
+                    .style("font-family", "'Montserrat', sans-serif")
 
 
 
@@ -271,84 +259,25 @@ function retrieve_data(value) {
 
                 function filterData(data) {
                     console.log('filterData(data)')
-                        // console.log(countries)
 
                     countries_selected = []
                     countries.forEach(function(d) {
-                            // console.log(d)
-                            var cbb = document.querySelector('#' + d.id);
-                            if (cbb.checked == true) {
-                                countries_selected.push(cbb.value)
-                                    // console.log(countries_selected)
-                            } else {
-                                countries_selected.filter((n) => { return n != cbb.value.toString() })
-                            }
-                        })
-                        // console.log(countries_selected)
+                        var cbb = document.querySelector('#' + d.id);
+                        if (cbb.checked == true) {
+                            countries_selected.push(cbb.value)
+                        } else {
+                            countries_selected.filter((n) => { return n != cbb.value.toString() })
+                        }
+                    })
 
 
                     var filteredData = data.filter(function(elem) {
-                        // console.log(elem)
                         if (countries_selected.includes(elem.countryiso3code)) {
-                            // console.log(elem)
                             return elem
                         } else {}
                     })
 
                     data = filteredData
-
-                    // console.log(filteredData)
-
-
-                    // update years filter
-
-                    // try {
-                    //     var unique_years = []
-
-                    //     var yearsList = []
-
-                    //     data.forEach((d) => {
-                    //         // console.log(d.year
-
-                    //         if (unique_years.includes(d.date)) {
-
-                    //         } else { unique_years.push(d.date) }
-                    //     })
-
-                    //     console.log(unique_years)
-
-                    //     var list = document.getElementById('yearSelectorBlock')
-                    //     try {
-                    //         while (list.firstChild) {
-                    //             list.removeChild(list.lastChild);
-                    //         }
-                    //     } catch {}
-                    //     il = document.createElement('div');
-                    //     il.id = 'yearsSelector'
-                    //     list.appendChild(il)
-
-                    //     unique_years.sort().forEach((d) => {
-                    //         if (yearsList.includes(d)) {
-
-                    //         } else {
-                    //             singleYear = []
-                    //             singleYear.push(d)
-                    //             singleYear.push(d)
-                    //             yearsList.push(singleYear)
-                    //         }
-                    //     })
-
-                    //     yearsSelector = new CustomSelect('#yearsSelector', {
-                    //         name: yearsList[0][1],
-                    //         targetValue: yearsList[0][0],
-                    //         options: yearsList,
-                    //     })
-
-                    //     console.log(yearsList)
-                    // } catch {}
-
-
-
 
                     var color = d3.scaleOrdinal()
                         .domain(data)
@@ -401,19 +330,16 @@ function retrieve_data(value) {
 
                     var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
                         .key(function(d) {
-                            // console.log(d)
                             return d.country.value;
                         })
                         .entries(data);
 
-                    // console.log(sumstat)
 
                     var arr = []
                     data.forEach(function(d) {
                         arr.push(+d.value)
                     })
 
-                    // console.log(arr)
 
                     function domainRes(arr) {
                         if (d3.min(arr) > 0) {
@@ -424,12 +350,6 @@ function retrieve_data(value) {
                     }
 
                     domainResult = domainRes(arr)
-
-                    // console.log(domainResult)
-
-
-
-
 
 
                     var line_y = d3.scaleLinear()
@@ -448,13 +368,11 @@ function retrieve_data(value) {
                         .duration(500)
                         .call(LineyAxis)
 
-
-                    // console.log(line_y_axis)
-
                     line_y_axis
                         .selectAll("text")
-                        .style('font', '10px "serifRegular"')
+                        .style('font', '10px')
                         .style('color', '#444444')
+                        .style("font-family", "'Montserrat', sans-serif")
                         .text(function(d) {
                             if (d < 1.0) {
                                 return d
@@ -465,7 +383,6 @@ function retrieve_data(value) {
                         })
 
                     LineyAxis.tickFormat(function(d) {
-                        // console.log(d)
                         return f(d)
                     });
 
@@ -481,8 +398,11 @@ function retrieve_data(value) {
                         .attr("dx", "-.8em")
                         .attr("dy", ".15em")
                         .attr("transform", "rotate(-80)")
-                        .style('font', '10px "serifRegular"')
+                        .style('font', '14px')
                         .style('color', '#444444')
+                        .style("font-family", "'Montserrat', sans-serif")
+
+
 
 
                     line_svg.selectAll(".group")
@@ -498,15 +418,22 @@ function retrieve_data(value) {
 
 
                     line_group.append("path")
-                        .attr("class", "line")
+                        .attr("class", function(d) {
+                            keyForClass = d.key.replace(/\s/g, "")
+                            keyForClass = keyForClass.replace(",", "")
+                            keyForClass = keyForClass.replace(".", "")
+                            keyForClass = keyForClass.replace("(", "")
+                            keyForClass = keyForClass.replace(")", "")
+                            return keyForClass + "Hover hoveredGroup line"
+                        })
                         .transition()
                         .duration(500)
                         .attr("d", function(d) {
+                            console.log(d)
                             return linepath(d.values);
                         })
                         .attr("fill", "none")
                         .style("stroke", function(d) {
-                            // console.log(d)
                             return color(d.key);
                         })
                         .style("stroke-width", "2px")
@@ -522,8 +449,10 @@ function retrieve_data(value) {
                         .style("border-width", "1px")
                         .style("border-radius", "5px")
                         .style("padding", "10px")
-                        .style("font", "14px 'sansBold'")
                         .style("color", "#444444")
+                        .style('font', '14px')
+                        .style("font-family", "'Montserrat', sans-serif")
+
 
 
                     var circles = line_svg.append('g')
@@ -531,12 +460,19 @@ function retrieve_data(value) {
                         .data(data)
                         .enter()
                         .append("circle")
-                        .attr("class", function(d) { return "cl" + d.date + " circle" })
+                        .attr("class", function(d) {
+                            console.log(d)
+                            keyForClass = d.country.value.replace(/\s/g, "")
+                            keyForClass = keyForClass.replace(",", "")
+                            keyForClass = keyForClass.replace(".", "")
+                            keyForClass = keyForClass.replace("(", "")
+                            keyForClass = keyForClass.replace(")", "")
+                            return "cl" + d.date + " circle " + keyForClass + "Hover"
+                        })
                         .attr("cx", function(d) { return line_x(d.date); })
                         .attr("cy", function(d) { return line_y(d.value); })
                         .attr("r", 2)
                         .style("fill", function(d) {
-                            // console.log(d)
                             return color(d.country.value);
                         })
                         .style('r', "5px")
@@ -592,18 +528,6 @@ function retrieve_data(value) {
                         barData = []
 
 
-                        // .text(function(d) {
-                        //     // console.log(d)
-                        //     if (d.value > 1.0) {
-                        //         return f(d.value)
-                        //     } else if (d.value < 0) {
-                        //         return f(d.value)
-                        //     } else if (d.value < 1.0 && d.value > 0) {
-                        //         return d.value.toFixed(2)
-                        //     }
-
-
-
                         tooltip
                             .style("opacity", 1)
                             .style("left", (d3.mouse(this)[0] + 50) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
@@ -612,12 +536,7 @@ function retrieve_data(value) {
                                 var selected = d3.selectAll(".cl" + d)
                                 selected._groups.forEach(nodeList => {
                                     nodeList.forEach(d => {
-                                        // console.log(d)
-                                        // for (var i = 0; i < selected.length; i++) {
-                                        // console.log(d)
                                         if (d.nodeName == "circle") {
-                                            // console.log(d.__data__)
-                                            // console.log(d)
                                             barData.push({
                                                 country: d.__data__.country.value,
                                                 value: d.__data__.value,
@@ -640,7 +559,6 @@ function retrieve_data(value) {
                                 })
                                 string = ""
                                 text.forEach(elem => {
-                                    // console.log(elem)
                                     string = string + elem.country + " " + elem.value + "<br>"
                                 })
                                 return "<b>Year: " + d + "</b><br>" + string
@@ -741,8 +659,6 @@ function retrieve_data(value) {
                         data.forEach((elem) => {
                             row = []
                             for (const [key, value] of Object.entries(elem)) {
-                                // console.log(key)
-                                // console.log(value)
                                 if (key == 'indicator') {
                                     row.push(value.id)
                                     row.push(value.value)
@@ -757,26 +673,6 @@ function retrieve_data(value) {
                         })
 
                     } catch {}
-
-
-                    // try {
-                    //     for (const [key, value] of Object.entries(data[0])) {
-                    //         head.push(key)
-                    //     }
-
-                    //     dataForDownload.push(head)
-
-                    //     data.forEach(elem => {
-
-                    //         for (const [key, value] of Object.entries(elem)) {
-                    //             row.push(value)
-                    //         }
-                    //         dataForDownload.push(row)
-                    //     })
-
-                    // } catch {}
-
-                    // exportToCsv(dataFiltered[0].seriesDescription, dataForDownload)
 
 
                     var downloadButtonDiv = document.getElementById("downloadButtonDiv");
@@ -801,7 +697,6 @@ function retrieve_data(value) {
 
 
                     var listener = function() {
-                        // console.log(dataForDownload)
                         exportToCsv(csvName.slice(0, 150), dataForDownload)
                     }
 
@@ -819,25 +714,23 @@ function retrieve_data(value) {
                         }
                     } catch {}
 
-                    // console.log(countries)
-
-
-                    // if (sumstat.length >= 32) {
-                    //     legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + Math.round(sumstat.length / 4) + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
-                    // } else if (sumstat.length >= 15) {
-                    //     legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + Math.round(sumstat.length / 2) + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
-                    // } else if (sumstat.length >= 10) {
-                    //     legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + Math.round(sumstat.length / 2) + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
-                    // } else {
-                    //     legend_block.style.cssText = "display: grid; grid-template-columns: repeat(" + sumstat.length + ", 1fr); grid-gap: 5px; grid-auto-flow: row; margin-bottom 1vh;"
-                    // }
-
                     sumstat.forEach(country => {
                         legendElement = document.createElement('div');
                         colorSquare = document.createElement('div');
                         legendText = document.createElement('p');
                         legendText.innerHTML = country.key
-                        colorSquare.style.cssText = "height: 10px; width: 10px; background-color:" + color(country.key) + "; height: 12px;"
+                        keyForClass = country.key.replace(/\s/g, "")
+                        keyForClass = keyForClass.replace(",", "")
+                        keyForClass = keyForClass.replace(".", "")
+                        keyForClass = keyForClass.replace("(", "")
+                        keyForClass = keyForClass.replace(")", "")
+                            // legendElement.classList.add(keyForClass + "Hover");
+                            // legendElement.classList.add("hoveredGroup")
+                        colorSquare.classList.add(keyForClass + "Hover");
+                        colorSquare.classList.add("hoveredGroup")
+                        legendText.classList.add(keyForClass + "Hover");
+                        legendText.classList.add("hoveredGroup")
+                        colorSquare.style.cssText = "height: 10px; width: 10px; background-color:" + color(country.key)
                         legendElement.style.cssText = "display: grid; grid-template-columns: 1fr 95%; align-items: center; height: 12px;"
                         legend_block.appendChild(legendElement)
                         legendElement.appendChild(colorSquare)
@@ -845,6 +738,39 @@ function retrieve_data(value) {
 
                     })
 
+                    console.log(sumstat)
+
+                    // sumstat.forEach(country => {
+                    //     keyForClass = country.key.replace(/\s/g, "")
+                    //     keyForClass = keyForClass.replace(",", "")
+                    //     keyForClass = keyForClass.replace(".", "")
+                    //     keyForClass = keyForClass.replace("(", "")
+                    //     keyForClass = keyForClass.replace(")", "")
+                    //     console.log(keyForClass)
+                    //     elems = document.getElementsByClassName(keyForClass + "Hover")
+                    //     console.log(elems[1])
+                    //     elems[2].addEventListener('mouseover', (event) => {
+                    //         console.log(event.target.classList[0])
+                    //         hoveredGroup = document.getElementsByClassName("hoveredGroup")
+                    //         for (var y = 0; y < hoveredGroup.length; y++) {
+                    //             hoveredGroup[y].style.opacity = "0.1"
+                    //         }
+                    //         targetGroup = document.getElementsByClassName(event.target.classList[0])
+                    //         console.log(targetGroup)
+                    //         for (var f = 0; f < hoveredGroup.length; f++) {
+                    //             console.log(targetGroup)
+                    //             targetGroup[f].style.opacity = "1"
+                    //         }
+                    //     })
+
+                    //     elems[1].addEventListener('mouseleave', (event) => {
+                    //         hoveredGroup = document.getElementsByClassName("hoveredGroup")
+                    //         for (var x = 0; x < hoveredGroup.length; x++) {
+                    //             hoveredGroup[x].style.opacity = "1"
+                    //         }
+                    //     })
+
+                    // })
 
 
 
@@ -999,7 +925,6 @@ function retrieve_data(value) {
                     var f = d3.format(".2s")
 
                     var parent = document.querySelector('#yearsSelector')
-                        // console.log(parent)
                     const btn = parent.querySelector('.select__toggle')
                     year = btn.value
 
@@ -1008,17 +933,15 @@ function retrieve_data(value) {
                         var cbb = document.querySelector('#' + d.id);
                         if (cbb.checked == true) {
                             countries_selected.push(cbb.value)
-                                // console.log(countries_selected)
+
                         } else {
                             countries_selected.filter((n) => { return n != cbb.value.toString() })
                         }
                     })
 
-                    // console.log(countries_selected)
 
 
                     var filteredData = data.filter(function(elem) {
-                        // console.log(elem)
                         if (countries_selected.includes(elem.countryiso3code)) {
                             return elem
                         } else {}
@@ -1281,9 +1204,6 @@ function drawScatter(secondC = undefined, firstC = undefined) {
             .attr("transform",
                 "translate(" + scatter_margin.left + "," + scatter_margin.top + ")");
 
-
-        console.log("draw_scatter")
-
         try {
             parentIndicator = document.querySelector('#indicatorsSelector')
             firstC = parentIndicator.querySelector('.select__toggle').value
@@ -1308,7 +1228,7 @@ function drawScatter(secondC = undefined, firstC = undefined) {
         d3.json(url2, function(testData) {
 
 
-            var url = "https://api.worldbank.org/v2/country/" + countries_2 + "/indicator/" + firstC + ";" + secondC + "?source=2&format=json&per_page=" + testData[0].total + "&date=1900:" + year
+            var url = "https://api.worldbank.org/v2/country/" + countries_2 + "/indicator/" + firstC + ";" + secondC + "?source=2&format=json&per_page=" + testData[0].total + "&date=1900:" + urlYear
 
             d3.json(url, function(data) {
                 console.log(url)
@@ -1336,7 +1256,10 @@ function drawScatter(secondC = undefined, firstC = undefined) {
                 // secondC = "NY.GDP.PCAP.CD" /// set dynamycaly apdaited indicator
 
 
-                console.log(filteredData)
+                // console.log(filteredData)
+                // filteredData.forEach((elem) => {
+                //     console.log(elem.country.value + " " + elem.indicator.value + " " + elem.value)
+                // })
 
                 yScale = []
 
@@ -1383,8 +1306,10 @@ function drawScatter(secondC = undefined, firstC = undefined) {
                 scatter_svg.append("text")
                     .attr("text-anchor", "end")
                     .attr("x", scatter_width / 2 + scatter_margin.left)
-                    .attr("y", scatter_height + scatter_margin.top + 20)
-                    .text(firstIndicatorName[0]);
+                    .attr("y", scatter_height + scatter_margin.top + 30)
+                    .text(firstIndicatorName[0])
+                    .style('font', '9px')
+                    .style("font-family", "'Montserrat', sans-serif")
 
                 // Y axis label:
                 scatter_svg.append("text")
@@ -1393,6 +1318,8 @@ function drawScatter(secondC = undefined, firstC = undefined) {
                     .attr("y", -scatter_margin.left + 20)
                     .attr("x", 0)
                     .text(secondIndicatorName[0])
+                    .style('font', '9px')
+                    .style("font-family", "'Montserrat', sans-serif")
 
 
 
@@ -1415,7 +1342,9 @@ function drawScatter(secondC = undefined, firstC = undefined) {
                         .text('No data matching selected parametes')
                         .attr("x", scatter_width / 3)
                         .attr("y", scatter_height / 2)
-                        .style('font', '18px "serifRegular"')
+                        .style('font', '18px')
+                        .style("font-family", "'Montserrat', sans-serif")
+                        // .style('font', '18px "serifRegular"')
                         .style('color', '#444444')
                 }
 
@@ -1445,7 +1374,9 @@ function drawScatter(secondC = undefined, firstC = undefined) {
 
                 scatter_X_Axis
                     .selectAll("text")
-                    .style('font', '10px "serifRegular"')
+                    .style('font', '10px')
+                    .style("font-family", "'Montserrat', sans-serif")
+                    // .style('font', '10px "serifRegular"')
                     .style('fill', '#444444')
                     .text(function(d) {
                         // console.log(f(d))
@@ -1472,7 +1403,9 @@ function drawScatter(secondC = undefined, firstC = undefined) {
 
                 scatter_Y_Axis
                     .selectAll("text")
-                    .style('font', '10px "serifRegular"')
+                    // .style('font', '10px "serifRegular"')
+                    .style('font', '10px')
+                    .style("font-family", "'Montserrat', sans-serif")
                     .style('fill', '#444444')
                     .text(function(d) {
                         // console.log(f(d))
