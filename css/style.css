@@ -1,4 +1,4 @@
-@media (max-width: 699px) {
+@media (max-width: 600px) {
     #categorySelectorWrapper {
         display: block !important;
     }
@@ -17,7 +17,7 @@
     }
     #downloadButton {
         width: 80vw !important;
-        margin: auto;
+        margin: auto !important;
     }
 }
 
