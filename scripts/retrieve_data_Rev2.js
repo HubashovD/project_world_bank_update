@@ -82,7 +82,7 @@ function retrieve_data(value) {
         d3.json(url, function(data) {
 
             var url2 = "https://api.worldbank.org/v2/country/" + countries_2 + "/indicator/" + value + "?source=2&format=json&per_page=" + data[0].total + "&date=1900:" + year
-            console.log(url2)
+                // console.log(url2)
             d3.json(url2, function(data) {
 
 
@@ -258,7 +258,7 @@ function retrieve_data(value) {
 
 
                 function filterData(data) {
-                    console.log('filterData(data)')
+                    // console.log('filterData(data)')
 
                     countries_selected = []
                     countries.forEach(function(d) {
@@ -429,7 +429,7 @@ function retrieve_data(value) {
                         .transition()
                         .duration(500)
                         .attr("d", function(d) {
-                            console.log(d)
+                            // console.log(d)
                             return linepath(d.values);
                         })
                         .attr("fill", "none")
@@ -461,7 +461,7 @@ function retrieve_data(value) {
                         .enter()
                         .append("circle")
                         .attr("class", function(d) {
-                            console.log(d)
+                            // console.log(d)
                             keyForClass = d.country.value.replace(/\s/g, "")
                             keyForClass = keyForClass.replace(",", "")
                             keyForClass = keyForClass.replace(".", "")
@@ -629,7 +629,7 @@ function retrieve_data(value) {
 
                     dataForDownload = []
                     head = []
-                    console.log(data)
+                        // console.log(data)
 
                     try {
                         for (const [key, value] of Object.entries(data[0])) {
@@ -692,7 +692,7 @@ function retrieve_data(value) {
 
                     parentIndicator = document.querySelector('#indicatorsSelector')
                     const btn9 = parentIndicator.querySelector('.select__toggle');
-                    console.log(`Выбранное значение: ${btn9.innerHTML}`);
+                    // console.log(`Выбранное значение: ${btn9.innerHTML}`);
                     csvName = btn9.innerHTML
 
 
@@ -738,7 +738,7 @@ function retrieve_data(value) {
 
                     })
 
-                    console.log(sumstat)
+                    // console.log(sumstat)
 
                     // sumstat.forEach(country => {
                     //     keyForClass = country.key.replace(/\s/g, "")
@@ -1007,8 +1007,8 @@ function retrieve_data(value) {
                         .style("font-family", "'Montserrat', sans-serif")
                         .style('fill', 'white')
                         .text(function(d) {
-                            console.log
-                                // console.log(f(d))
+                            // console.log
+                            // console.log(f(d))
                             return f(d)
                         })
 
@@ -1098,7 +1098,7 @@ function retrieve_data(value) {
 
                 document.querySelector('#yearsSelector').addEventListener('select.change', (e) => {
                     const btn = e.target.querySelector('.select__toggle');
-                    console.log(`Выбранное значение: ${btn.value}`);
+                    // console.log(`Выбранное значение: ${btn.value}`);
                     filterData(cleanData)
                     drawMap(cleanData)
                     drawBar(cleanData)
@@ -1125,7 +1125,7 @@ function retrieve_data(value) {
                     drawBar(cleanData)
                 })
 
-                console.log(countries)
+                // console.log(countries)
 
                 countries.forEach((country) => {
                     document.querySelector('#' + country.id).addEventListener('change', (event) => {
@@ -1152,7 +1152,7 @@ function retrieve_data(value) {
 
     document.querySelector('#indicatorsSelector').addEventListener('select.change', (e) => {
         const btn = e.target.querySelector('.select__toggle');
-        console.log(`Выбранное значение: ${btn.value}`);
+        // console.log(`Выбранное значение: ${btn.value}`);
         download_data(btn.value)
     });
 }
@@ -1519,11 +1519,11 @@ function drawScatter(secondC = undefined, firstC = undefined) {
 // drawScatter(firstC = undefined, secondC = undefined)
 
 function addIndicatorsSelector(categoryList) {
-    console.log(categoryList)
-        // console.log("Hello!")
+    // console.log(categoryList)
+    // console.log("Hello!")
 
     function update(option) {
-        console.log(option)
+        // console.log(option)
 
         var list = document.getElementById('addIndicatorsSelectorBlock')
         try {
@@ -1543,12 +1543,12 @@ function addIndicatorsSelector(categoryList) {
                 })
                 // console.log(result)
             result.forEach(function(d) {
-                singleIndicator = []
-                singleIndicator.push(d.id)
-                singleIndicator.push(d.Indicator)
-                indicatorsList.push(singleIndicator)
-            })
-            console.log(indicatorsList)
+                    singleIndicator = []
+                    singleIndicator.push(d.id)
+                    singleIndicator.push(d.Indicator)
+                    indicatorsList.push(singleIndicator)
+                })
+                // console.log(indicatorsList)
             addIndicatorsSelector = new CustomSelect('#addIndicatorsSelector', {
                 name: indicatorsList[1][1],
                 targetValue: indicatorsList[1][0],
@@ -1571,7 +1571,7 @@ function indicatorsSelector(categoryList) {
     // console.log("Hello!")
 
     function update(option) {
-        console.log(option)
+        // console.log(option)
 
         var list = document.getElementById('indicatorsSelectorBlock')
         try {
